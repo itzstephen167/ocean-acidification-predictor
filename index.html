@@ -5,186 +5,262 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sour Seas — Ocean pH Predictor</title>
 <meta name="description" content="An interactive physics-based model of surface-ocean pH and aragonite saturation under rising atmospheric CO₂, projected to 2100.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%230b2a3d'/%3E%3Cpath d='M4 17c4-4 8 4 12 0s8 4 12 0v9H4z' fill='%2332c4c0'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231f2433'/%3E%3Cpath d='M6 18c3.3-3.3 6.7 3.3 10 0s6.7 3.3 10 0' stroke='%2353d6c2' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<header class="nav" id="nav">
-  <a class="brand" href="#top"><span class="brand-drop"></span>Sour Seas</a>
-  <nav>
-    <a href="#explore">Explore</a>
-    <a href="#scenarios">Scenarios</a>
-    <a href="#chemistry">Chemistry</a>
-    <a href="#trust">Limits</a>
-    <a href="#get">Get the model</a>
+<aside class="rail">
+  <a class="rail-logo" href="#overview" aria-label="Sour Seas home">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8"/><path d="M6 18c3.3-3.3 6.7 3.3 10 0s6.7 3.3 10 0"/></svg>
+  </a>
+  <nav class="rail-nav" id="nav" aria-label="Sections">
+    <a href="#overview" class="active" aria-label="Overview" title="Overview"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg></a>
+    <a href="#explore" aria-label="Explorer" title="Explorer"><svg viewBox="0 0 24 24"><path d="M2 9c2.5-2.5 5-2.5 7.5 0s5 2.5 7.5 0 3.5-2 5-1"/><path d="M2 15c2.5-2.5 5-2.5 7.5 0s5 2.5 7.5 0 3.5-2 5-1"/></svg></a>
+    <a href="#scenarios" aria-label="Scenarios" title="Scenarios"><svg viewBox="0 0 24 24"><path d="M5 20V11M11 20V5M17 20v-6M3 20h18"/></svg></a>
+    <a href="#chemistry" aria-label="Chemistry" title="Chemistry"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6L4.6 18.6A1.6 1.6 0 0 0 6 21h12a1.6 1.6 0 0 0 1.4-2.4L14 9V3M7 15h10"/></svg></a>
+    <a href="#limits" aria-label="Model limits" title="Model limits"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></a>
+    <a href="#get" aria-label="Download" title="Download"><svg viewBox="0 0 24 24"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5M12 11v6M9 14l3 3 3-3"/></svg></a>
   </nav>
-</header>
+  <a class="rail-gh" href="https://github.com/itzstephen167/ocean-acidification-predictor" aria-label="View source on GitHub" title="View source on GitHub">
+    <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+  </a>
+</aside>
 
-<!-- HERO -->
-<section class="hero" id="top">
-  <canvas id="heroCanvas" aria-hidden="true"></canvas>
-  <div class="hero-inner">
-    <p class="eyebrow">Physics-based ocean pH predictor</p>
-    <h1>The sea is quietly<br><em>changing its chemistry.</em></h1>
-    <p class="lede">Every ton of CO₂ we emit is partly swallowed by the ocean, making it more acidic. Drive the model yourself: pick a future, tilt the dials, and watch surface pH and shell-building chemistry respond, year by year, to 2100.</p>
-    <div class="hero-meter" aria-live="off">
-      <div class="big-ph"><span id="heroPh">8.17</span><small>global surface pH</small></div>
-      <div class="meter-meta"><span id="heroYear">1850</span><span class="meter-sub">now running the clock forward…</span></div>
+<main>
+
+  <!-- OVERVIEW -->
+  <section id="overview">
+    <div class="page-head">
+      <div>
+        <h1>Ocean pH Predictor</h1>
+        <p class="sub">A physics-based model of the global-mean surface ocean, 1850 to 2100.</p>
+      </div>
+      <a class="btn primary" href="#explore">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l5.5-3.5z"/></svg>
+        Run the model
+      </a>
     </div>
-    <div class="cta">
-      <a class="btn primary" href="#explore">Run the model</a>
-      <a class="btn ghost" href="#get">How it works</a>
-    </div>
-  </div>
-  <a class="scroll-hint" href="#explore" aria-label="Scroll to the explorer"><span></span></a>
-</section>
 
-<!-- EXPLORER -->
-<section class="explore" id="explore">
-  <div class="section-head reveal">
-    <p class="eyebrow">01 · Explorer</p>
-    <h2>Choose a future. Watch the water answer.</h2>
-    <p>The tank on the left is driven live by the carbonate-chemistry model. Drag the year or change the CO₂ path and the water colour, bubbles and the pteropod shell (a tiny sea snail whose shell dissolves in corrosive water) all respond.</p>
-  </div>
-
-  <div class="stage">
-    <div class="tank-col">
-      <div class="tank-wrap">
-        <canvas id="tank" role="img" aria-label="Animated ocean tank whose colour, bubbles and shell condition reflect the modelled pH and aragonite saturation"></canvas>
-        <div class="tank-hud">
-          <div class="hud-year"><span id="hudYear">2025</span></div>
-          <div class="hud-ph"><span id="hudPh">8.04</span><small>pH</small></div>
+    <div class="card">
+      <div class="card-head">
+        <h2>Key dates</h2>
+        <div class="stepper" aria-label="Timeline: 1850 and 2025 are past, 2050 and 2100 are projections">
+          <span class="stepper-label">Timeline</span>
+          <span class="step done" title="1850"><svg viewBox="0 0 16 16"><path d="M4 8.5l2.5 2.5L12 5.5"/></svg></span><i></i>
+          <span class="step done" title="2025"><svg viewBox="0 0 16 16"><path d="M4 8.5l2.5 2.5L12 5.5"/></svg></span><i></i>
+          <span class="step current" title="2050"></span><i class="todo"></i>
+          <span class="step" title="2100"></span>
         </div>
-        <div class="tank-status" id="shellStatus">Shell: healthy</div>
       </div>
-      <div class="scrub">
-        <label for="yearRange">Year</label>
-        <input type="range" id="yearRange" min="1850" max="2100" step="1" value="2025">
-        <button class="btn small" id="playBtn" aria-label="Play timeline">▶ Play</button>
+      <p class="card-sub">Global surface ocean</p>
+      <div class="rows" id="keyDates">
+        <div class="row">
+          <div class="row-name">Pre-industrial<span>1850 · 285 ppm CO₂</span></div>
+          <div><span class="badge">Baseline</span></div>
+          <div class="row-val">pH <b data-k="pH_1850">8.17</b></div>
+          <div class="row-act"><button class="btn soft" data-jump="intermediate" data-year="1850">View</button></div>
+        </div>
+        <div class="row">
+          <div class="row-name">Today<span>2025 · 427 ppm CO₂</span></div>
+          <div><span class="badge teal">Observed</span></div>
+          <div class="row-val">pH <b data-k="pH_2025">8.04</b></div>
+          <div class="row-act"><button class="btn soft" data-jump="intermediate" data-year="2025">View</button></div>
+        </div>
+        <div class="row">
+          <div class="row-name">2100, very high emissions<span>2100 · 1,100 ppm CO₂</span></div>
+          <div><span class="badge purple">Projection</span></div>
+          <div class="row-val">pH <b data-k="pH_2100">7.70</b></div>
+          <div class="row-act"><button class="btn soft" data-jump="very_high" data-year="2100">View</button></div>
+        </div>
       </div>
-      <p class="tiny tank-note">Shell damage is illustrative: scaled from aragonite Ω (3.4 → 1), not a measured dose-response. Real pteropod harm shows up first in regions where Ω nears 1.</p>
     </div>
 
-    <div class="panel-col">
-      <div class="seg" role="radiogroup" aria-label="Emissions scenario" id="scenarioSeg">
-        <button role="radio" data-s="low">Low</button>
-        <button role="radio" data-s="intermediate" class="on">Intermediate</button>
-        <button role="radio" data-s="high">High</button>
-        <button role="radio" data-s="very_high">Very high</button>
-        <button role="radio" data-s="custom" id="customBtn" hidden>Custom</button>
-      </div>
-      <p class="scn-desc" id="scnDesc"></p>
-
-      <div class="cards" id="cards">
-        <div class="card"><span class="k">Atmospheric CO₂</span><span class="v" id="cCo2">–</span><span class="u">ppm</span></div>
-        <div class="card"><span class="k">Acidity vs pre-industrial</span><span class="v" id="cAcid">–</span><span class="u">more [H⁺]</span></div>
-        <div class="card"><span class="k">Aragonite Ω</span><span class="v" id="cOmega">–</span><span class="u">1 = dissolves</span></div>
-        <div class="card"><span class="k">pH change since 1850</span><span class="v" id="cDelta">–</span><span class="u">units</span></div>
+    <div class="grid3">
+      <div class="card highlight">
+        <h2>Since pre-industrial times</h2>
+        <div class="big" id="hlAcid">+38%</div>
+        <p>more hydrogen ions in surface seawater, as CO₂ rose to <b id="hlCo2">427</b> ppm. pH has fallen <b id="hlDrop">0.13</b> since 1850.</p>
       </div>
 
-      <div class="chart-block">
-        <div class="chart-title"><h3>Surface pH</h3><span class="legend"><i class="sw band"></i>90% parameter band <i class="sw ghost"></i>other scenarios</span></div>
-        <canvas id="chartPh" class="chart" role="img" aria-label="Line chart of modelled global surface pH from 1850 to 2100"></canvas>
-      </div>
-      <div class="chart-block">
-        <div class="chart-title"><h3>Aragonite saturation Ω</h3><span class="legend"><i class="sw line1"></i>Ω = 1: shells start to dissolve</span></div>
-        <canvas id="chartOm" class="chart short" role="img" aria-label="Line chart of aragonite saturation state"></canvas>
+      <div class="card">
+        <div class="card-head"><h2>Make a prediction</h2></div>
+        <label for="guess" class="q">Which emissions path is the world on?</label>
+        <div class="select-wrap">
+          <select id="guess">
+            <option value="" selected disabled>Select answer…</option>
+            <option value="low">Low: CO₂ peaks, then declines</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="high">High: emissions keep rising</option>
+            <option value="very_high">Very high: fossil-fuelled growth</option>
+          </select>
+        </div>
+        <p class="answer" id="guessAnswer" hidden></p>
       </div>
 
-      <details class="dials" open>
-        <summary>Tinker with the dials</summary>
-        <p class="dial-note">Moving any dial re-runs the chemistry in your browser (Monte-Carlo uncertainty ensemble). Regions differ a lot from the global mean, so try a cold, low-alkalinity sea.</p>
+      <div class="card">
+        <div class="card-head">
+          <h2>2100 outlook</h2>
+          <a class="icon-btn" href="#scenarios" aria-label="Compare scenarios"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+        <div class="mini" id="miniBars"></div>
+        <a class="btn wide" href="#scenarios">Compare scenarios</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPLORER -->
+  <section id="explore">
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h2>Explorer</h2>
+          <p class="card-sub flush" id="scnDesc"></p>
+        </div>
+        <div class="seg" role="radiogroup" aria-label="Emissions scenario" id="scenarioSeg">
+          <button role="radio" data-s="low">Low</button>
+          <button role="radio" data-s="intermediate" class="on">Intermediate</button>
+          <button role="radio" data-s="high">High</button>
+          <button role="radio" data-s="very_high">Very high</button>
+          <button role="radio" data-s="custom" id="customBtn" hidden>Custom</button>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="tank-col">
+          <div class="tank-wrap">
+            <canvas id="tank" role="img" aria-label="Animated ocean tank whose colour, bubbles and shell condition reflect the modelled pH and aragonite saturation"></canvas>
+            <div class="tank-hud">
+              <div class="hud-year" id="hudYear">2025</div>
+              <div class="hud-ph"><span id="hudPh">8.04</span><small>pH</small></div>
+            </div>
+            <div class="tank-status" id="shellStatus">Shell: healthy</div>
+          </div>
+          <div class="scrub">
+            <label for="yearRange">Year</label>
+            <input type="range" id="yearRange" min="1850" max="2100" step="1" value="2025">
+            <button class="btn primary small" id="playBtn" aria-label="Play timeline">Play</button>
+          </div>
+          <p class="note">Shell damage is illustrative: scaled from aragonite Ω (3.4 → 1), not a measured dose-response.</p>
+        </div>
+
+        <div class="panel-col">
+          <div class="stats">
+            <div class="stat"><span class="k">Atmospheric CO₂</span><span class="v" id="cCo2">–</span><span class="u">ppm</span></div>
+            <div class="stat"><span class="k">Acidity vs pre-industrial</span><span class="v" id="cAcid">–</span><span class="u">more H⁺ ions</span></div>
+            <div class="stat"><span class="k">Aragonite Ω</span><span class="v" id="cOmega">–</span><span class="u">below 1, shells dissolve</span></div>
+            <div class="stat"><span class="k">pH change since 1850</span><span class="v" id="cDelta">–</span><span class="u">pH units</span></div>
+          </div>
+          <div class="chart-block">
+            <div class="chart-title"><h3>Surface pH</h3><span class="legend"><i class="sw band"></i>90% parameter range <i class="sw ghost"></i>other scenarios</span></div>
+            <canvas id="chartPh" class="chart" role="img" aria-label="Line chart of modelled global surface pH from 1850 to 2100"></canvas>
+          </div>
+          <div class="chart-block">
+            <div class="chart-title"><h3>Aragonite saturation (Ω)</h3><span class="legend"><i class="sw ref"></i>Ω = 1</span></div>
+            <canvas id="chartOm" class="chart short" role="img" aria-label="Line chart of aragonite saturation state"></canvas>
+          </div>
+          <p class="note">Click or drag on a chart to move through time.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h2>Adjust the ocean</h2>
+        <button class="btn soft small" id="resetBtn">Reset</button>
+      </div>
+      <p class="card-sub">Changing a setting re-runs the chemistry in your browser, including the uncertainty range. Try a cold, low-alkalinity sea.</p>
+      <div class="dials">
         <div class="dial"><label for="sCo250">CO₂ in 2050 <output id="oCo250"></output></label><input type="range" id="sCo250" min="400" max="700" step="1"></div>
         <div class="dial"><label for="sCo2100">CO₂ in 2100 <output id="oCo2100"></output></label><input type="range" id="sCo2100" min="350" max="1400" step="1"></div>
         <div class="dial"><label for="sTa">Total alkalinity <output id="oTa"></output></label><input type="range" id="sTa" min="1800" max="2800" step="10"></div>
         <div class="dial"><label for="sTemp">Sea temperature <output id="oTemp"></output></label><input type="range" id="sTemp" min="0" max="32" step="0.5"></div>
         <div class="dial"><label for="sWarm">Warming after 2025 <output id="oWarm"></output></label><input type="range" id="sWarm" min="0" max="0.5" step="0.05"></div>
-        <button class="btn small ghost" id="resetBtn">Reset dials</button>
-      </details>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- SCENARIOS -->
-<section class="showdown" id="scenarios">
-  <div class="section-head reveal">
-    <p class="eyebrow">02 · Scenario showdown</p>
-    <h2>Four futures, one ocean.</h2>
-    <p>Where surface pH lands in 2100 depends almost entirely on how much CO₂ we put in the air between now and then. Hover a bar, or click one to load it into the explorer.</p>
-  </div>
-  <div class="bars reveal" id="bars"></div>
-  <p class="foot-note reveal">Scenario paths are rounded, SSP-like illustrations, not the official concentration files. Global-mean surface ocean.</p>
-</section>
+  <!-- SCENARIOS -->
+  <section id="scenarios">
+    <div class="card">
+      <div class="card-head"><h2>Scenarios</h2></div>
+      <p class="card-sub">Surface pH in 2100 by emissions path. The paths are rounded, SSP-like illustrations.</p>
+      <div class="rows" id="bars"></div>
+    </div>
+  </section>
 
-<!-- CHEMISTRY -->
-<section class="chem" id="chemistry">
-  <div class="section-head reveal">
-    <p class="eyebrow">03 · Under the hood</p>
-    <h2>Why more CO₂ means less carbonate.</h2>
-    <p>CO₂ reacts with water and with carbonate ions: <code>CO₂ + CO₃²⁻ + H₂O → 2 HCO₃⁻</code>. Carbonate, the ion shells are built from, gets used up and hydrogen ions pile up. Slide the year in the explorer to see how each ingredient has shifted relative to pre-industrial water.</p>
-  </div>
-  <div class="species reveal" id="species"></div>
-  <div class="eq-grid reveal">
-    <div class="eq-card"><h4>1 · Air meets water</h4><p>Surface water takes up a fraction of the rise in atmospheric CO₂ (calibrated: <b>89%</b> to match the observed 1985–2022 pH trend).</p></div>
-    <div class="eq-card"><h4>2 · Solve for [H⁺]</h4><p>Given alkalinity and CO₂, the model bisects on hydrogen-ion concentration until charge balance holds across carbonate, borate and water.</p></div>
-    <div class="eq-card"><h4>3 · Read the outputs</h4><p>pH, dissolved inorganic carbon, carbonate, and Ω: calcium × carbonate over the aragonite solubility product.</p></div>
-  </div>
-</section>
+  <!-- CHEMISTRY -->
+  <section id="chemistry">
+    <div class="card">
+      <div class="card-head"><h2>Chemistry</h2><span class="badge">Year <span id="specYear">2025</span></span></div>
+      <p class="card-sub">CO₂ reacts with carbonate ions: <code>CO₂ + CO₃²⁻ + H₂O → 2 HCO₃⁻</code>. Carbonate, which shells are built from, gets used up and hydrogen ions build up. Change against pre-industrial water:</p>
+      <div class="species" id="species"></div>
+      <p class="note">Bars use a compressed scale so small and large changes both stay visible.</p>
+    </div>
+    <div class="grid3">
+      <div class="card step-card"><span class="num">1</span><h3>Air meets water</h3><p>Surface water takes up a set share of the rise in atmospheric CO₂. That share, 89%, is calibrated to the observed 1985–2022 pH trend.</p></div>
+      <div class="card step-card"><span class="num">2</span><h3>Solve for H⁺</h3><p>Given alkalinity and CO₂, the model searches for the hydrogen-ion concentration that balances carbonate, borate and water charges.</p></div>
+      <div class="card step-card"><span class="num">3</span><h3>Read the outputs</h3><p>pH, dissolved inorganic carbon, carbonate, and Ω: calcium × carbonate over aragonite's solubility product.</p></div>
+    </div>
+  </section>
 
-<!-- TRUST -->
-<section class="trust" id="trust">
-  <div class="section-head reveal">
-    <p class="eyebrow">04 · Honest limits</p>
-    <h2>What this model is, and isn't.</h2>
-  </div>
-  <div class="trust-grid">
-    <article class="reveal good"><h3>Checks it passes</h3>
-      <ul>
-        <li>Calibrated to one number only: the 1985–2022 trend of −0.0017 pH/yr (Copernicus Marine).</li>
-        <li><b>Untuned</b> check: pH change 1850→2022 is −0.125, close to the published ≈ −0.1.</li>
-        <li><b>Untuned</b> check: Revelle factor 10.6, inside the typical 8–14 range.</li>
-        <li>Very-high scenario lands at pH 7.70 in 2100, in line with published high-emissions projections.</li>
-      </ul></article>
-    <article class="reveal warn"><h3>Where to be careful</h3>
-      <ul>
-        <li>Global-mean surface box. Cold, upwelling and coastal waters sit well away from 8.04.</li>
-        <li>The shaded band is <b>parameter</b> uncertainty only (alkalinity ±40, temperature ±1.5 °C, equilibration ±0.05). It excludes scenario choice, regional differences and natural variability.</li>
-        <li>Not modelled: changing alkalinity or circulation, biology, sulfate/fluoride/phosphate/silicate terms.</li>
-        <li>CO₂ history is an approximation of the Mauna Loa record; scenarios are SSP-<i>like</i>. Swap in official files before quoting numbers in anything formal.</li>
-      </ul></article>
-    <article class="reveal sensor"><h3>Can a sensor even see this?</h3>
-      <p>The repo includes a potentiometric-electrode simulator. One robust result: an electrode drift of just <b>0.1 mV per year</b> mimics the entire global acidification trend. Catching a −0.0017 pH/yr signal takes careful calibration, not just a good sensor.</p>
-      <p class="tiny">Sensor noise and drift values are simulation inputs, not specs of any real product.</p></article>
-  </div>
-</section>
+  <!-- LIMITS -->
+  <section id="limits">
+    <div class="grid3">
+      <article class="card">
+        <div class="card-head"><h2>Checks it passes</h2><span class="badge teal">Validated</span></div>
+        <ul class="list">
+          <li>Calibrated to one number: the 1985–2022 trend of −0.0017 pH per year (Copernicus Marine).</li>
+          <li>Untuned: pH change 1850–2022 is −0.125, against a published ≈ −0.1.</li>
+          <li>Untuned: Revelle factor 10.6, inside the typical 8–14 range.</li>
+          <li>Very high scenario reaches pH 7.70 by 2100, in line with published projections.</li>
+        </ul>
+      </article>
+      <article class="card">
+        <div class="card-head"><h2>Be careful with</h2><span class="badge">Caution</span></div>
+        <ul class="list">
+          <li>One global-mean surface box. Cold, upwelling and coastal waters sit well away from 8.04.</li>
+          <li>The shaded range is parameter uncertainty only. It leaves out scenario choice, regional differences and natural variability.</li>
+          <li>Not modelled: changing alkalinity or circulation, biology, minor ions.</li>
+          <li>CO₂ history approximates Mauna Loa; scenarios are SSP-like.</li>
+        </ul>
+      </article>
+      <article class="card">
+        <div class="card-head"><h2>Can a sensor see this?</h2><span class="badge purple">Sensor</span></div>
+        <p class="body">The model repo includes a pH-electrode simulator. A drift of only <b>0.1 mV per year</b> looks the same as the whole global acidification trend, so detecting it depends on careful calibration.</p>
+        <p class="note">Noise and drift values are simulation inputs, not specs of any real product.</p>
+      </article>
+    </div>
+  </section>
 
-<!-- GET -->
-<section class="get" id="get">
-  <div class="section-head reveal">
-    <p class="eyebrow">05 · Take it with you</p>
-    <h2>Use the model in your own work.</h2>
-  </div>
-  <div class="get-grid reveal">
-    <a class="dl" href="assets/ocean_ph_model.py" download><b>ocean_ph_model.py</b><span>The model. No plotting, no I/O on import.</span></a>
-    <a class="dl" href="assets/Predicting_Ocean_pH_Under_Rising_CO2_Conditions.ipynb" download><b>Notebook</b><span>Walkthrough with outputs already run.</span></a>
-    <a class="dl" href="assets/projections.json" download><b>projections.json</b><span>All four scenarios + metadata.</span></a>
-    <a class="dl" href="assets/test_ocean_ph_model.py" download><b>Tests</b><span>13 tests: <code>python test_ocean_ph_model.py</code></span></a>
-  </div>
-<pre class="code reveal"><code>import ocean_ph_model as m
+  <!-- DOWNLOAD -->
+  <section id="get">
+    <div class="card">
+      <div class="card-head">
+        <h2>Model files</h2>
+        <a class="icon-btn" href="https://github.com/itzstephen167/ocean-acidification-predictor" aria-label="Open repository"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="rows files">
+        <div class="row"><div class="row-name mono">ocean_ph_model.py<span>The model. No plotting, no I/O on import.</span></div><div><span class="badge">Python</span></div><div class="row-act"><a class="btn soft" href="assets/ocean_ph_model.py" download>Download</a></div></div>
+        <div class="row"><div class="row-name mono">Notebook (.ipynb)<span>Walkthrough with outputs already run.</span></div><div><span class="badge">Jupyter</span></div><div class="row-act"><a class="btn soft" href="assets/Predicting_Ocean_pH_Under_Rising_CO2_Conditions.ipynb" download>Download</a></div></div>
+        <div class="row"><div class="row-name mono">projections.json<span>All four scenarios with metadata.</span></div><div><span class="badge">Data</span></div><div class="row-act"><a class="btn soft" href="assets/projections.json" download>Download</a></div></div>
+        <div class="row"><div class="row-name mono">test_ocean_ph_model.py<span>13 tests, run with pytest.</span></div><div><span class="badge">Tests</span></div><div class="row-act"><a class="btn soft" href="assets/test_ocean_ph_model.py" download>Download</a></div></div>
+      </div>
+      <pre class="code"><code>import ocean_ph_model as m
 df = m.project("intermediate")                 # year, co2_ppm, pH, pH_lo, pH_hi, omega_arag …
-m.headline_stats(df)                           # numbers for UI cards
-m.project({2050: 500, 2100: 700})              # your own CO₂ pathway
-m.project("high", m.OceanParams(ta_umol_kg=2250, temp_c=22))   # another ocean region</code></pre>
-</section>
+m.project({2050: 500, 2100: 700})              # your own CO₂ path
+m.project("high", m.OceanParams(ta_umol_kg=2250, temp_c=22))   # a different region</code></pre>
+    </div>
+  </section>
 
-<footer>
-  <p><b>Sour Seas</b> · Live chemistry runs in your browser with a JavaScript port of <code>ocean_ph_model.py</code>. Precomputed scenario bands come straight from <code>projections.json</code>.</p>
-  <p class="tiny">Constants: Weiss 1974, Lueker et al. 2000, Dickson 1990, Millero 1995, Mucci 1983, Lee et al. 2010, Weiss &amp; Price 1980.</p>
-</footer>
+  <footer>
+    <span>© 2026 Sour Seas · Built by Stephen Apemah-Baah</span>
+    <span>Constants: Weiss 1974, Lueker et al. 2000, Dickson 1990, Millero 1995, Mucci 1983, Lee et al. 2010</span>
+  </footer>
+</main>
 
 <script src="assets/data.js"></script>
 <script src="assets/model.js"></script>

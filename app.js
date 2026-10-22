@@ -53,60 +53,6 @@
   /* ---------- tiny seeded rng ---------- */
   function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
 
-  /* ================= HERO ================= */
-  const hero = $('heroCanvas'), hctx = hero.getContext('2d');
-  let hw = 0, hh = 0, heroPh = 8.175, mouseX = 0.5;
-  const heroBubbles = Array.from({ length: 46 }, (_, i) => ({ x: Math.random(), y: Math.random(), r: 1 + Math.random() * 4, s: 0.02 + Math.random() * 0.06, p: Math.random() * 6 }));
-  function sizeHero() { const r = hero.getBoundingClientRect(), d = dpr(); hw = r.width; hh = r.height; hero.width = hw * d; hero.height = hh * d; hctx.setTransform(d, 0, 0, d, 0, 0); }
-  window.addEventListener('resize', sizeHero); sizeHero();
-  hero.parentElement.addEventListener('pointermove', (e) => { mouseX = e.clientX / innerWidth; });
-  let heroVisible = true;
-  new IntersectionObserver((e) => { heroVisible = e[0].isIntersecting; }, { threshold: 0 }).observe(hero);
-  function drawHero(t) {
-    if (heroVisible) {
-      const c = waterColors(heroPh);
-      const g = hctx.createLinearGradient(0, 0, 0, hh);
-      g.addColorStop(0, rgb(c.bot.map((v) => v * 0.45))); g.addColorStop(0.55, rgb(c.bot, 1)); g.addColorStop(1, '#04121c');
-      hctx.fillStyle = g; hctx.fillRect(0, 0, hw, hh);
-      // light rays
-      for (let i = 0; i < 5; i++) {
-        const x = hw * (0.1 + i * 0.2) + Math.sin(t / 3000 + i) * 60 + (mouseX - 0.5) * 80;
-        const rg = hctx.createLinearGradient(x, 0, x, hh * 0.8);
-        rg.addColorStop(0, rgb(c.top.map((v) => Math.min(255, v + 90)), 0.12)); rg.addColorStop(1, 'transparent');
-        hctx.fillStyle = rg; hctx.beginPath(); hctx.moveTo(x - 20, 0); hctx.lineTo(x + 20, 0); hctx.lineTo(x + 160 + Math.sin(t / 2500 + i) * 40, hh * 0.8); hctx.lineTo(x - 120, hh * 0.8); hctx.fill();
-      }
-      // bubbles
-      for (const b of heroBubbles) {
-        b.y -= b.s * 0.004 * 16; if (b.y < -0.05) { b.y = 1.05; b.x = Math.random(); }
-        const x = (b.x + Math.sin(t / 1500 + b.p) * 0.01) * hw;
-        hctx.beginPath(); hctx.arc(x, b.y * hh, b.r, 0, 6.283); hctx.strokeStyle = 'rgba(220,245,245,.25)'; hctx.lineWidth = 1; hctx.stroke();
-      }
-      // waves
-      for (let k = 0; k < 4; k++) {
-        const base = hh * (0.74 + k * 0.07), amp = 14 + k * 5, sp = (k + 1) * 0.00035 * (reduced ? 0 : 1);
-        hctx.beginPath(); hctx.moveTo(0, hh);
-        for (let x = 0; x <= hw; x += 8) hctx.lineTo(x, base + Math.sin(x * 0.006 + t * sp + k * 2) * amp + Math.sin(x * 0.013 - t * sp * 1.7) * amp * 0.4 + (mouseX - 0.5) * 12 * k);
-        hctx.lineTo(hw, hh); hctx.closePath();
-        hctx.fillStyle = rgb(c.top.map((v) => v * (0.35 + k * 0.13)), 0.55); hctx.fill();
-      }
-    }
-    requestAnimationFrame(drawHero);
-  }
-  requestAnimationFrame(drawHero);
-
-  // hero counter: sweep 1850 -> 2025 on the intermediate record
-  (function heroCount() {
-    const rows = D.projections.intermediate, end = 2025 - YEAR0, t0 = performance.now(), dur = reduced ? 1 : 3800;
-    const ph = $('heroPh'), yr = $('heroYear'), sub = document.querySelector('.meter-sub');
-    function step(now) {
-      const t = clamp((now - t0) / dur, 0, 1), e = 1 - Math.pow(1 - t, 3), i = Math.round(e * end), r = rows[i];
-      ph.textContent = r.pH.toFixed(2); yr.textContent = r.year; heroPh = r.pH;
-      ph.style.color = rgb(waterColors(r.pH).top.map((v) => Math.min(255, v + 80)));
-      if (t < 1) requestAnimationFrame(step); else sub.textContent = 'today. See where it goes next ↓';
-    }
-    requestAnimationFrame(step);
-  })();
-
   /* ================= SHELL ================= */
   const shellCache = new Map();
   function shellCanvas(integrity) {
@@ -227,38 +173,37 @@
     ctx.clearRect(0, 0, w, h);
     const pw = w - PAD.l - PAD.r, ph = h - PAD.t - PAD.b;
     const X = (y) => PAD.l + (y - YEAR0) / (YEAR1 - YEAR0) * pw, Y = (v) => PAD.t + (1 - (v - o.min) / (o.max - o.min)) * ph;
-    ctx.font = '11px "JetBrains Mono",monospace'; ctx.textBaseline = 'middle';
+    ctx.font = '11px Poppins, system-ui, sans-serif'; ctx.textBaseline = 'middle';
     // grid
-    ctx.strokeStyle = 'rgba(159,194,200,.12)'; ctx.fillStyle = 'rgba(159,194,200,.7)'; ctx.lineWidth = 1; ctx.textAlign = 'right';
+    ctx.strokeStyle = '#e4e6ec'; ctx.fillStyle = '#7a7f8c'; ctx.lineWidth = 1; ctx.textAlign = 'right';
     for (let v = Math.ceil(o.min / o.step) * o.step; v <= o.max + 1e-9; v += o.step) { const y = Y(v); ctx.beginPath(); ctx.moveTo(PAD.l, y); ctx.lineTo(w - PAD.r, y); ctx.stroke(); ctx.fillText(v.toFixed(o.dec), PAD.l - 8, y); }
     ctx.textAlign = 'center'; ctx.textBaseline = 'top';
     for (let y = 1850; y <= 2100; y += 50) ctx.fillText(y, X(y), h - PAD.b + 8);
     // reference line
     if (o.ref != null && o.ref > o.min && o.ref < o.max) {
-      ctx.strokeStyle = 'rgba(255,122,89,.8)'; ctx.setLineDash([5, 5]); ctx.beginPath(); ctx.moveTo(PAD.l, Y(o.ref)); ctx.lineTo(w - PAD.r, Y(o.ref)); ctx.stroke(); ctx.setLineDash([]);
+      ctx.strokeStyle = '#e5484d'; ctx.setLineDash([5, 5]); ctx.beginPath(); ctx.moveTo(PAD.l, Y(o.ref)); ctx.lineTo(w - PAD.r, Y(o.ref)); ctx.stroke(); ctx.setLineDash([]);
     }
     // ghosts
-    ctx.strokeStyle = 'rgba(159,194,200,.38)'; ctx.lineWidth = 1.3;
+    ctx.strokeStyle = '#c9ccd6'; ctx.lineWidth = 1.3;
     for (const g of o.ghosts) { ctx.beginPath(); g.forEach((r, i) => { const x = X(r.year), y = Y(r[o.key]); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.stroke(); }
     // band
     ctx.beginPath(); o.rows.forEach((r, i) => { const x = X(r.year), y = Y(r[o.key + '_hi']); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
     for (let i = o.rows.length - 1; i >= 0; i--) ctx.lineTo(X(o.rows[i].year), Y(o.rows[i][o.key + '_lo']));
-    ctx.closePath(); ctx.fillStyle = 'rgba(50,196,192,.22)'; ctx.fill();
+    ctx.closePath(); ctx.fillStyle = 'rgba(106,76,245,.16)'; ctx.fill();
     // projection start
-    const fx = X(2025); ctx.strokeStyle = 'rgba(159,194,200,.25)'; ctx.beginPath(); ctx.moveTo(fx, PAD.t); ctx.lineTo(fx, h - PAD.b); ctx.stroke();
-    ctx.fillStyle = 'rgba(159,194,200,.6)'; ctx.textAlign = 'left'; ctx.textBaseline = 'top'; ctx.fillText('observed ◂ ▸ projected', fx - 62, PAD.t + 2);
+    const fx = X(2025); ctx.strokeStyle = '#d5d8e2'; ctx.beginPath(); ctx.moveTo(fx, PAD.t); ctx.lineTo(fx, h - PAD.b); ctx.stroke();
+    ctx.fillStyle = '#9a9eb0'; ctx.textBaseline = 'top'; ctx.textAlign = 'right'; ctx.fillText('observed', fx - 6, PAD.t + 2); ctx.textAlign = 'left'; ctx.fillText('projected', fx + 6, PAD.t + 2);
     // line (gradient by pH/omega)
-    const lg = ctx.createLinearGradient(PAD.l, 0, w - PAD.r, 0); lg.addColorStop(0, '#6fe3d8'); lg.addColorStop(1, '#f2b548');
-    ctx.strokeStyle = lg; ctx.lineWidth = 2.8; ctx.lineJoin = 'round'; ctx.beginPath();
+    ctx.strokeStyle = '#6a4cf5'; ctx.lineWidth = 2.5; ctx.lineJoin = 'round'; ctx.beginPath();
     o.rows.forEach((r, i) => { const x = X(r.year), y = Y(r[o.key]); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.stroke();
     // marker
     const r = o.rows[clamp(state.year - YEAR0, 0, o.rows.length - 1)], mx = X(r.year), my = Y(r[o.key]);
-    ctx.strokeStyle = 'rgba(255,255,255,.45)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(mx, PAD.t); ctx.lineTo(mx, h - PAD.b); ctx.stroke();
+    ctx.strokeStyle = 'rgba(31,36,51,.25)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(mx, PAD.t); ctx.lineTo(mx, h - PAD.b); ctx.stroke();
     ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(mx, my, 5.5, 0, 6.283); ctx.fill();
-    ctx.strokeStyle = '#32c4c0'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.strokeStyle = '#6a4cf5'; ctx.lineWidth = 2.5; ctx.stroke();
     const label = r[o.key].toFixed(o.dec + 1), tw2 = ctx.measureText(label).width + 14, lx = clamp(mx - tw2 / 2, PAD.l, w - PAD.r - tw2), ly = my < PAD.t + 50 ? my + 12 : my - 28;
-    ctx.fillStyle = 'rgba(4,18,28,.92)'; ctx.beginPath(); ctx.roundRect(lx, ly, tw2, 20, 6); ctx.fill();
-    ctx.fillStyle = '#e8f6f5'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(label, lx + tw2 / 2, ly + 10.5);
+    ctx.fillStyle = '#1f2433'; ctx.beginPath(); ctx.roundRect(lx, ly, tw2, 20, 6); ctx.fill();
+    ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(label, lx + tw2 / 2, ly + 10.5);
   }
   function domain(rows, ghosts, key, padFrac, step) {
     let lo = Infinity, hi = -Infinity;
@@ -295,11 +240,12 @@
   function species(r) {
     const p = Object.assign({}, M.DEFAULTS, params()), base = M.oceanState(p.ref, 2025, p), now = M.oceanState(r.co2_ppm, r.year, p);
     const items = [
-      ['Dissolved CO₂', 'CO₂(aq)', now.co2aq / base.co2aq - 1, '#ff7a59'],
-      ['Bicarbonate', 'HCO₃⁻', now.hco3 / base.hco3 - 1, '#6fe3d8'],
-      ['Carbonate', 'CO₃²⁻ · shell-builder', now.co3 / base.co3 - 1, '#f2b548'],
-      ['Hydrogen ions', 'H⁺ · acidity', now.h / base.h - 1, '#ff7a59'],
+      ['Dissolved CO₂', 'CO₂(aq)', now.co2aq / base.co2aq - 1, '#f2734f'],
+      ['Bicarbonate', 'HCO₃⁻', now.hco3 / base.hco3 - 1, '#13a89e'],
+      ['Carbonate', 'CO₃²⁻ · builds shells', now.co3 / base.co3 - 1, '#e0a400'],
+      ['Hydrogen ions', 'H⁺ · acidity', now.h / base.h - 1, '#8d48e6'],
     ];
+    $('specYear').textContent = r.year;
     const el = $('species');
     if (!el.children.length) el.innerHTML = items.map(() => '<div class="sp"><div class="nm"></div><div class="axis"><i></i></div><div class="val"></div></div>').join('');
     items.forEach(([n, sub, pct, col], i) => {
@@ -338,29 +284,61 @@
 
   /* play */
   let playing = 0;
-  function stopPlay() { if (playing) { cancelAnimationFrame(playing); playing = 0; $('playBtn').textContent = '▶ Play'; } }
+  function stopPlay() { if (playing) { cancelAnimationFrame(playing); playing = 0; $('playBtn').textContent = 'Play'; } }
   $('playBtn').addEventListener('click', () => {
     if (playing) return stopPlay();
     if (state.year >= YEAR1) state.year = YEAR0;
-    $('playBtn').textContent = '❚❚ Pause'; let last = performance.now(), acc = 0;
+    $('playBtn').textContent = 'Pause'; let last = performance.now(), acc = 0;
     const tick = (now) => { acc += now - last; last = now; while (acc > 45) { acc -= 45; state.year++; } if (state.year >= YEAR1) { setYear(YEAR1); return stopPlay(); } setYear(state.year); playing = requestAnimationFrame(tick); };
     playing = requestAnimationFrame(tick);
   });
 
-  /* ================= SHOWDOWN ================= */
-  (function bars() {
-    const el = $('bars'); const cols = { low: '#32c4c0', intermediate: '#9bd36a', high: '#f2b548', very_high: '#ff7a59' };
-    el.innerHTML = Object.keys(PRESETS).map((s) => {
-      const h = D.headline[s];
-      return `<button class="bar" data-s="${s}" aria-label="${PRESETS[s].label}: pH ${h.pH_2100.toFixed(2)} in 2100. Load into explorer."><div class="name">${PRESETS[s].label}<small>${h.co2_ppm_2100} ppm in 2100</small></div><div class="track"><div class="fill" data-w="${((h.pH_1850 - h.pH_2100) / 0.55 * 100).toFixed(1)}" style="background:${cols[s]}"></div></div><div class="num">${h.pH_2100.toFixed(2)}<small>+${h.acidity_change_pct_2100.toFixed(0)}% acid · Ω ${h.omega_arag_2100.toFixed(1)}</small></div></button>`;
-    }).join('');
-    el.querySelectorAll('.bar').forEach((b) => b.addEventListener('click', () => { pick(b.dataset.s); setYear(2100); $('explore').scrollIntoView({ behavior: 'smooth' }); }));
-  })();
+  /* ================= SCENARIO ROWS ================= */
+  const goExplore = () => $('explore').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' });
+  function jump(s, year) { pick(s); setYear(year); goExplore(); }
+  $('bars').innerHTML = Object.keys(PRESETS).map((s) => {
+    const h = D.headline[s], w = ((h.pH_1850 - h.pH_2100) / 0.55 * 100).toFixed(1);
+    return `<div class="row scn-row">
+      <div class="row-name">${PRESETS[s].label}<span>${h.co2_ppm_2100.toLocaleString()} ppm CO₂ in 2100</span></div>
+      <div class="drop" title="pH drop since 1850"><i style="width:${w}%"></i></div>
+      <div><span class="badge">+${h.acidity_change_pct_2100.toFixed(0)}% acidity</span></div>
+      <div class="row-val">pH <b>${h.pH_2100.toFixed(2)}</b></div>
+      <div class="row-act"><button class="btn soft" data-jump="${s}" data-year="2100">Open</button></div>
+    </div>`;
+  }).join('');
 
-  /* ================= REVEAL ================= */
-  const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); e.target.querySelectorAll('.fill').forEach((f) => { f.style.width = f.dataset.w + '%'; }); io.unobserve(e.target); } }), { threshold: 0.15 });
-  document.querySelectorAll('.reveal').forEach((n) => io.observe(n));
-  const nav = $('nav'); const onScroll = () => nav.classList.toggle('solid', scrollY > 40); addEventListener('scroll', onScroll, { passive: true }); onScroll();
+  /* ================= OVERVIEW ================= */
+  // Same rounding as the explorer readout, so the numbers agree.
+  const vhRows = D.projections.very_high, at = (y) => vhRows[y - YEAR0].pH.toFixed(2);
+  document.querySelectorAll('#keyDates [data-k]').forEach((b) => { b.textContent = at(+b.dataset.k.slice(3)); });
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-jump]');
+    if (b) jump(b.dataset.jump, +b.dataset.year);
+  });
+  $('guess').addEventListener('change', (e) => {
+    const s = e.target.value, h = D.headline[s], out = $('guessAnswer');
+    out.hidden = false;
+    out.innerHTML = `On the <b>${PRESETS[s].label.toLowerCase()}</b> path, surface pH reaches <b>${h.pH_2100.toFixed(2)}</b> by 2100. The water would be ` +
+      `<b>${h.acidity_change_pct_2100.toFixed(0)}%</b> more acidic than pre-industrial, and aragonite Ω would fall to <b>${h.omega_arag_2100.toFixed(2)}</b>. ` +
+      `<button class="btn soft small" data-jump="${s}" data-year="2100">See it in the explorer</button>`;
+  });
+
+  // Highlight card: today vs 1850 on the observed record
+  const today = D.projections.intermediate[2025 - YEAR0], first = D.projections.intermediate[0];
+  $('hlAcid').textContent = '+' + today.acidity_change_pct.toFixed(0) + '%';
+  $('hlCo2').textContent = Math.round(today.co2_ppm);
+  $('hlDrop').textContent = (first.pH - today.pH).toFixed(2);
+  $('miniBars').innerHTML = Object.keys(PRESETS).map((s) => {
+    const h = D.headline[s];
+    return `<div class="mini-row"><span>${PRESETS[s].label}</span><div class="drop"><i style="width:${((h.pH_1850 - h.pH_2100) / 0.55 * 100).toFixed(1)}%"></i></div><b>${h.pH_2100.toFixed(2)}</b></div>`;
+  }).join('');
+
+  /* ================= NAV ================= */
+  const links = [...document.querySelectorAll('#nav a')];
+  const spy = new IntersectionObserver((es) => es.forEach((e) => {
+    if (e.isIntersecting) links.forEach((a) => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+  }), { rootMargin: '-45% 0px -50% 0px' });
+  document.querySelectorAll('main > section').forEach((sec) => spy.observe(sec));
 
   syncDials(); render();
   window.__ocean = { state, pick, setYear, getRows: () => rows };
