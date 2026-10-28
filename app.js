@@ -234,6 +234,7 @@
     $('yearRange').value = r.year;
     species(r);
     chPh.draw && chPh.draw(); chOm.draw && chOm.draw();
+    saveUrlSoon();
   }
   function setYear(y) { state.year = clamp(y, YEAR0, YEAR1); readout(); }
 
@@ -304,6 +305,42 @@
     } else if (e.key === ' ' && !e.target.closest('button, a')) { e.preventDefault(); togglePlay(); }
   });
 
+  /* ================= SHAREABLE LINKS ================= */
+  // ?s=scenario&y=year, plus c50/c100 for a custom path and ta/t/w for a modified ocean. Defaults are left out.
+  const snap = (v, step, lo, hi) => +clamp(Math.round(v / step) * step, lo, hi).toFixed(2);
+  function loadUrl() {
+    const q = new URLSearchParams(location.search), num = (k) => { const v = parseFloat(q.get(k)); return Number.isFinite(v) ? v : null; };
+    const s = q.get('s');
+    if (PRESETS[s]) Object.assign(state, { scenario: s, co2_50: PRESETS[s].anchors[2050], co2_100: PRESETS[s].anchors[2100] });
+    else if (s === 'custom' && num('c50') != null && num('c100') != null) Object.assign(state, { scenario: 'custom', co2_50: snap(num('c50'), 1, 400, 700), co2_100: snap(num('c100'), 1, 350, 1400) });
+    if (num('ta') != null) state.ta = snap(num('ta'), 10, 1800, 2800);
+    if (num('t') != null) state.temp = snap(num('t'), 0.5, 0, 32);
+    if (num('w') != null) state.warm = snap(num('w'), 0.05, 0, 0.5);
+    if (num('y') != null) state.year = snap(num('y'), 1, YEAR0, YEAR1);
+  }
+  function shareUrl() {
+    const q = new URLSearchParams();
+    if (state.scenario !== 'intermediate') q.set('s', state.scenario);
+    if (state.scenario === 'custom') { q.set('c50', state.co2_50); q.set('c100', state.co2_100); }
+    if (state.year !== 2025) q.set('y', state.year);
+    if (state.ta !== 2300) q.set('ta', state.ta);
+    if (state.temp !== 18) q.set('t', state.temp);
+    if (state.warm) q.set('w', state.warm);
+    const qs = q.toString();
+    return location.pathname + (qs ? '?' + qs : '');
+  }
+  // Debounced so playing the timeline doesn't flood history.replaceState.
+  let urlTimer = 0;
+  function saveUrlSoon() { clearTimeout(urlTimer); urlTimer = setTimeout(() => history.replaceState(null, '', shareUrl() + location.hash), 300); }
+  $('shareBtn').addEventListener('click', () => {
+    const b = $('shareBtn'), url = location.origin + shareUrl() + '#explore';
+    const done = (msg) => { b.textContent = msg; setTimeout(() => { b.textContent = 'Copy link'; }, 1600); };
+    // The address bar always holds the same link, so point there if the clipboard is blocked.
+    history.replaceState(null, '', shareUrl() + location.hash);
+    if (navigator.clipboard) navigator.clipboard.writeText(url).then(() => done('Copied'), () => done('Use address bar'));
+    else done('Use address bar');
+  });
+
   /* ================= SCENARIO ROWS ================= */
   const goExplore = () => $('explore').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' });
   function jump(s, year) { pick(s); setYear(year); goExplore(); }
@@ -351,6 +388,6 @@
   }), { rootMargin: '-45% 0px -50% 0px' });
   document.querySelectorAll('main > section').forEach((sec) => spy.observe(sec));
 
-  syncDials(); render();
-  window.__ocean = { state, pick, setYear, getRows: () => rows };
+  loadUrl(); syncDials(); recompute(true);
+  window.__ocean = { state, pick, setYear, getRows: () => rows, shareUrl };
 })();
