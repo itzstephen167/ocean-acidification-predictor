@@ -71,6 +71,7 @@ h1 { font-size: clamp(1.5rem, 3vw, 1.9rem); }
 .card-sub { color: var(--muted); margin: 6px 0 14px; max-width: 760px; }
 .card-sub.flush { margin: 2px 0 0; font-size: .9rem; }
 .note { font-size: .8rem; color: var(--muted); margin: 10px 0 0; }
+kbd { font: 500 .74rem var(--sans); color: var(--ink); background: #fff; border: 1px solid #dcdee6; border-bottom-width: 2px; border-radius: 6px; padding: 1px 6px; }
 .body { margin: 12px 0 0; }
 .grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
 .grid3 .card { margin-top: 0; }

@@ -285,12 +285,23 @@
   /* play */
   let playing = 0;
   function stopPlay() { if (playing) { cancelAnimationFrame(playing); playing = 0; $('playBtn').textContent = 'Play'; } }
-  $('playBtn').addEventListener('click', () => {
+  function togglePlay() {
     if (playing) return stopPlay();
     if (state.year >= YEAR1) state.year = YEAR0;
     $('playBtn').textContent = 'Pause'; let last = performance.now(), acc = 0;
     const tick = (now) => { acc += now - last; last = now; while (acc > 45) { acc -= 45; state.year++; } if (state.year >= YEAR1) { setYear(YEAR1); return stopPlay(); } setYear(state.year); playing = requestAnimationFrame(tick); };
     playing = requestAnimationFrame(tick);
+  }
+  $('playBtn').addEventListener('click', togglePlay);
+
+  /* keyboard: ← → move a year (Shift for ten), space plays; only while the explorer is on screen */
+  const exploreOnScreen = () => { const r = $('explore').getBoundingClientRect(); return r.top < innerHeight * 0.6 && r.bottom > innerHeight * 0.4; };
+  document.addEventListener('keydown', (e) => {
+    if (e.altKey || e.ctrlKey || e.metaKey || !exploreOnScreen()) return;
+    if (e.target.closest('input, select, textarea, [contenteditable]')) return;
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      e.preventDefault(); stopPlay(); setYear(state.year + (e.key === 'ArrowRight' ? 1 : -1) * (e.shiftKey ? 10 : 1));
+    } else if (e.key === ' ' && !e.target.closest('button, a')) { e.preventDefault(); togglePlay(); }
   });
 
   /* ================= SCENARIO ROWS ================= */
