@@ -341,6 +341,27 @@
     else done('Use address bar');
   });
 
+  /* ================= CSV EXPORT ================= */
+  // Exactly the rows the charts are drawing, with the settings that produced them in a comment header.
+  const CSV_COLS = ['year', 'phase', 'co2_ppm', 'pH', 'pH_lo', 'pH_hi', 'acidity_change_pct', 'omega_arag', 'omega_arag_lo', 'omega_arag_hi', 'dic_umol_kg', 'co3_umol_kg'];
+  function projectionCsv() {
+    const scn = state.scenario === 'custom' ? `custom (${state.co2_50} ppm in 2050, ${state.co2_100} ppm in 2100)` : PRESETS[state.scenario].label;
+    const head = [
+      '# Ocean pH Predictor: global-mean surface projection',
+      `# scenario: ${scn}`,
+      `# total alkalinity ${state.ta} umol/kg, temperature ${state.temp} C, warming ${state.warm} C/decade`,
+      '# _lo/_hi = 5th-95th percentile parameter uncertainty band',
+    ];
+    const fmt = (v) => typeof v === 'number' ? +v.toFixed(4) : v;
+    return head.concat(CSV_COLS.join(','), rows.map((r) => CSV_COLS.map((k) => fmt(r[k])).join(','))).join('\n') + '\n';
+  }
+  $('csvBtn').addEventListener('click', () => {
+    const a = document.createElement('a'), url = URL.createObjectURL(new Blob([projectionCsv()], { type: 'text/csv' }));
+    a.href = url; a.download = `ocean-ph-${state.scenario.replace('_', '-')}.csv`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+
   /* ================= SCENARIO ROWS ================= */
   const goExplore = () => $('explore').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' });
   function jump(s, year) { pick(s); setYear(year); goExplore(); }
@@ -389,5 +410,5 @@
   document.querySelectorAll('main > section').forEach((sec) => spy.observe(sec));
 
   loadUrl(); syncDials(); recompute(true);
-  window.__ocean = { state, pick, setYear, getRows: () => rows, shareUrl };
+  window.__ocean = { state, pick, setYear, getRows: () => rows, shareUrl, projectionCsv };
 })();
