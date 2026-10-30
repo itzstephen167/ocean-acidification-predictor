@@ -7,7 +7,7 @@ Small, self-contained improvements, done one at a time.
 - [x] 3. Keyboard shortcuts in the explorer (← → to move the year, space to play)
 - [x] 4. Shareable links: store scenario, year and dial settings in the URL
 - [x] 5. Export the current projection as CSV
-- [ ] 6. Dark mode (follows the system setting)
+- [x] 6. Dark mode (follows the system setting)
 - [ ] 7. Accessibility: data-table fallback for the charts, check focus order and contrast
 - [ ] 8. Sensor-detection calculator ("how many years until a sensor can see the trend?")
 - [ ] 9. Region presets: polar, tropical, coastal upwelling
