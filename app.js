@@ -168,6 +168,12 @@
   const PAD = { l: 46, r: 16, t: 14, b: 26 };
   const chPh = setupChart($('chartPh')), chOm = setupChart($('chartOm'));
 
+  // Chart colours come from CSS custom properties so the canvases follow dark mode.
+  let C = {};
+  const readColors = () => { const cs = getComputedStyle(document.documentElement); for (const k of ['grid', 'text', 'ghost', 'split', 'split-text', 'cursor', 'dot', 'tag']) C[k] = cs.getPropertyValue('--chart-' + k).trim(); };
+  readColors();
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { readColors(); chPh.draw && chPh.draw(); chOm.draw && chOm.draw(); });
+
   function drawChart(ch, o) {
     const { ctx, w, h } = ch; if (!w) return;
     ctx.clearRect(0, 0, w, h);
@@ -175,7 +181,7 @@
     const X = (y) => PAD.l + (y - YEAR0) / (YEAR1 - YEAR0) * pw, Y = (v) => PAD.t + (1 - (v - o.min) / (o.max - o.min)) * ph;
     ctx.font = '11px Poppins, system-ui, sans-serif'; ctx.textBaseline = 'middle';
     // grid
-    ctx.strokeStyle = '#e4e6ec'; ctx.fillStyle = '#7a7f8c'; ctx.lineWidth = 1; ctx.textAlign = 'right';
+    ctx.strokeStyle = C.grid; ctx.fillStyle = C.text; ctx.lineWidth = 1; ctx.textAlign = 'right';
     for (let v = Math.ceil(o.min / o.step) * o.step; v <= o.max + 1e-9; v += o.step) { const y = Y(v); ctx.beginPath(); ctx.moveTo(PAD.l, y); ctx.lineTo(w - PAD.r, y); ctx.stroke(); ctx.fillText(v.toFixed(o.dec), PAD.l - 8, y); }
     ctx.textAlign = 'center'; ctx.textBaseline = 'top';
     for (let y = 1850; y <= 2100; y += 50) ctx.fillText(y, X(y), h - PAD.b + 8);
@@ -184,25 +190,25 @@
       ctx.strokeStyle = '#e5484d'; ctx.setLineDash([5, 5]); ctx.beginPath(); ctx.moveTo(PAD.l, Y(o.ref)); ctx.lineTo(w - PAD.r, Y(o.ref)); ctx.stroke(); ctx.setLineDash([]);
     }
     // ghosts
-    ctx.strokeStyle = '#c9ccd6'; ctx.lineWidth = 1.3;
+    ctx.strokeStyle = C.ghost; ctx.lineWidth = 1.3;
     for (const g of o.ghosts) { ctx.beginPath(); g.forEach((r, i) => { const x = X(r.year), y = Y(r[o.key]); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.stroke(); }
     // band
     ctx.beginPath(); o.rows.forEach((r, i) => { const x = X(r.year), y = Y(r[o.key + '_hi']); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
     for (let i = o.rows.length - 1; i >= 0; i--) ctx.lineTo(X(o.rows[i].year), Y(o.rows[i][o.key + '_lo']));
     ctx.closePath(); ctx.fillStyle = 'rgba(106,76,245,.16)'; ctx.fill();
     // projection start
-    const fx = X(2025); ctx.strokeStyle = '#d5d8e2'; ctx.beginPath(); ctx.moveTo(fx, PAD.t); ctx.lineTo(fx, h - PAD.b); ctx.stroke();
-    ctx.fillStyle = '#9a9eb0'; ctx.textBaseline = 'top'; ctx.textAlign = 'right'; ctx.fillText('observed', fx - 6, PAD.t + 2); ctx.textAlign = 'left'; ctx.fillText('projected', fx + 6, PAD.t + 2);
+    const fx = X(2025); ctx.strokeStyle = C.split; ctx.beginPath(); ctx.moveTo(fx, PAD.t); ctx.lineTo(fx, h - PAD.b); ctx.stroke();
+    ctx.fillStyle = C['split-text']; ctx.textBaseline = 'top'; ctx.textAlign = 'right'; ctx.fillText('observed', fx - 6, PAD.t + 2); ctx.textAlign = 'left'; ctx.fillText('projected', fx + 6, PAD.t + 2);
     // line (gradient by pH/omega)
     ctx.strokeStyle = '#6a4cf5'; ctx.lineWidth = 2.5; ctx.lineJoin = 'round'; ctx.beginPath();
     o.rows.forEach((r, i) => { const x = X(r.year), y = Y(r[o.key]); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.stroke();
     // marker
     const r = o.rows[clamp(state.year - YEAR0, 0, o.rows.length - 1)], mx = X(r.year), my = Y(r[o.key]);
-    ctx.strokeStyle = 'rgba(31,36,51,.25)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(mx, PAD.t); ctx.lineTo(mx, h - PAD.b); ctx.stroke();
-    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(mx, my, 5.5, 0, 6.283); ctx.fill();
+    ctx.strokeStyle = C.cursor; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(mx, PAD.t); ctx.lineTo(mx, h - PAD.b); ctx.stroke();
+    ctx.fillStyle = C.dot; ctx.beginPath(); ctx.arc(mx, my, 5.5, 0, 6.283); ctx.fill();
     ctx.strokeStyle = '#6a4cf5'; ctx.lineWidth = 2.5; ctx.stroke();
     const label = r[o.key].toFixed(o.dec + 1), tw2 = ctx.measureText(label).width + 14, lx = clamp(mx - tw2 / 2, PAD.l, w - PAD.r - tw2), ly = my < PAD.t + 50 ? my + 12 : my - 28;
-    ctx.fillStyle = '#1f2433'; ctx.beginPath(); ctx.roundRect(lx, ly, tw2, 20, 6); ctx.fill();
+    ctx.fillStyle = C.tag; ctx.beginPath(); ctx.roundRect(lx, ly, tw2, 20, 6); ctx.fill();
     ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(label, lx + tw2 / 2, ly + 10.5);
   }
   function domain(rows, ghosts, key, padFrac, step) {
