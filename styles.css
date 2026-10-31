@@ -2,13 +2,14 @@
   --canvas: #f3f4f7;
   --card: #fff;
   --ink: #262a35;
-  --muted: #7a7f8c;
+  --muted: #686d7c;
   --line: #eceef3;
   --surface: #f7f8fa;
   --dark: #1f2433;
   --purple: #6a4cf5;
   --purple-dark: #5537e6;
   --purple-soft: #efebff;
+  --purple-text: #6a4cf5; /* purple used as text; lighter in dark mode for contrast */
   --teal: #13a89e;
   --gradient: linear-gradient(135deg, #5fb784 0%, #6f97a6 45%, #8a4fe5 100%);
   --shadow: 0 1px 2px rgba(16, 24, 40, .04), 0 6px 24px rgba(16, 24, 40, .05);
@@ -20,7 +21,7 @@
   --field-line: #dcdee6; --track: #e3e5ec; --tick: #d5d7e0; --axis-mid: #b2b6c4;
   --badge-bg: #fbf2c0; --badge-ink: #6b5600; --teal-bg: #d8f5f1; --teal-ink: #0b6b63; --purple-ink: #4a2fc9; --soft-hover: #e3dcff;
   /* chart canvas colours, read by app.js */
-  --chart-grid: #e4e6ec; --chart-text: #7a7f8c; --chart-ghost: #c9ccd6; --chart-split: #d5d8e2; --chart-split-text: #9a9eb0;
+  --chart-grid: #e4e6ec; --chart-text: #686d7c; --chart-ghost: #c9ccd6; --chart-split: #d5d8e2; --chart-split-text: #686d7c;
   --chart-cursor: rgba(31,36,51,.25); --chart-dot: #fff; --chart-tag: #1f2433;
   color-scheme: light;
 }
@@ -28,12 +29,12 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --canvas: #12151c; --card: #1c202b; --ink: #e6e8ee; --muted: #9aa0ad; --line: #2a2f3c; --surface: #242936;
-    --dark: #323a4f; --purple-soft: #2c2650;
+    --dark: #323a4f; --purple-soft: #2c2650; --purple-text: #a693ff;
     --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 24px rgba(0, 0, 0, .25);
     --lift: 0 1px 2px rgba(0, 0, 0, .35), 0 4px 14px rgba(0, 0, 0, .3);
     --field-line: #3a4050; --track: #343a4a; --tick: #4a5164; --axis-mid: #5a6175;
     --badge-bg: #3d3514; --badge-ink: #f3d86b; --teal-bg: #12352f; --teal-ink: #7fdcd0; --purple-ink: #c2b4ff; --soft-hover: #383063;
-    --chart-grid: #2f3442; --chart-text: #9aa0ad; --chart-ghost: #4a5164; --chart-split: #3a4050; --chart-split-text: #808699;
+    --chart-grid: #2f3442; --chart-text: #9aa0ad; --chart-ghost: #4a5164; --chart-split: #3a4050; --chart-split-text: #8f95a8;
     --chart-cursor: rgba(230,232,238,.25); --chart-dot: #1c202b; --chart-tag: #3a4258;
     color-scheme: dark;
   }
@@ -65,6 +66,10 @@ code { font-family: var(--mono); font-size: .84em; background: var(--surface); b
 .rail-gh { background: var(--purple); color: #fff; }
 .rail-gh:hover { background: var(--purple-dark); }
 .rail-gh svg { width: 22px; height: 22px; fill: currentColor; }
+
+/* Skip link: first thing keyboard users reach, hidden until focused */
+.skip { position: absolute; left: 12px; top: -60px; z-index: 30; background: var(--dark); color: #fff; padding: 10px 16px; border-radius: 10px; font-weight: 500; text-decoration: none; }
+.skip:focus { top: 12px; }
 
 main { margin-left: 84px; padding: 40px clamp(16px, 4vw, 56px) 32px; max-width: 1340px; }
 main > section + section { margin-top: 28px; }
@@ -105,14 +110,14 @@ kbd { font: 500 .74rem var(--sans); color: var(--ink); background: var(--card); 
 .btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; }
 .btn.primary { background: var(--purple); color: #fff; }
 .btn.primary:hover { background: var(--purple-dark); }
-.btn.soft { background: var(--purple-soft); color: var(--purple); }
+.btn.soft { background: var(--purple-soft); color: var(--purple-text); }
 .btn.soft:hover { background: var(--soft-hover); }
-.btn.wide { width: 100%; margin-top: 18px; color: var(--purple); box-shadow: var(--lift); }
+.btn.wide { width: 100%; margin-top: 18px; color: var(--purple-text); box-shadow: var(--lift); }
 .btn.wide:hover { box-shadow: 0 2px 4px rgba(16,24,40,.08), 0 8px 20px rgba(16,24,40,.09); }
 .btn.small { padding: 7px 14px; font-size: .86rem; border-radius: 10px; }
 .icon-btn { width: 44px; height: 44px; border-radius: 12px; background: var(--card); display: grid; place-items: center; color: var(--ink); box-shadow: var(--lift); }
 .icon-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.btn:focus-visible, .icon-btn:focus-visible, .seg button:focus-visible, select:focus-visible, .rail a:focus-visible { outline: 3px solid rgba(106,76,245,.35); outline-offset: 2px; }
+.btn:focus-visible, .icon-btn:focus-visible, .seg button:focus-visible, select:focus-visible, .rail a:focus-visible, summary:focus-visible, .skip:focus-visible { outline: 3px solid rgba(106,76,245,.35); outline-offset: 2px; }
 .badge { display: inline-block; background: var(--badge-bg); color: var(--badge-ink); font-size: .72rem; font-weight: 500; letter-spacing: .05em; text-transform: uppercase; padding: 3px 9px; border-radius: 6px; white-space: nowrap; }
 .badge.teal { background: var(--teal-bg); color: var(--teal-ink); }
 .badge.purple { background: var(--purple-soft); color: var(--purple-ink); }
@@ -201,6 +206,17 @@ select { width: 100%; appearance: none; font: 400 .95rem var(--sans); color: var
 .chart { width: 100%; height: 250px; display: block; touch-action: pan-y; cursor: ew-resize; border-radius: 14px; background: var(--surface); }
 .chart.short { height: 180px; }
 
+/* Data-table fallback for the two canvas charts */
+.data-table { margin-top: 14px; }
+.data-table summary { cursor: pointer; font-weight: 500; font-size: .9rem; color: var(--purple-text); border-radius: 8px; width: fit-content; }
+.table-wrap { max-height: 320px; overflow: auto; margin-top: 10px; border-radius: 14px; background: var(--surface); }
+.data-table table { width: 100%; border-collapse: collapse; font-size: .84rem; font-variant-numeric: tabular-nums; }
+.data-table caption { text-align: left; padding: 10px 14px 4px; color: var(--muted); font-size: .8rem; }
+.data-table th, .data-table td { padding: 7px 14px; text-align: right; border-top: 1px solid var(--line); white-space: nowrap; }
+.data-table th:first-child, .data-table td:first-child { text-align: left; }
+.data-table thead th { position: sticky; top: 0; background: var(--surface); font-weight: 600; border-top: 0; }
+.data-table tr.now td { background: var(--purple-soft); font-weight: 600; }
+
 input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 3px; background: var(--track); cursor: pointer; }
 input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--purple); border: 3px solid var(--card); box-shadow: 0 0 0 1px var(--purple); }
 input[type=range]::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--purple); border: 3px solid var(--card); box-shadow: 0 0 0 1px var(--purple); }
@@ -208,7 +224,7 @@ input[type=range]:focus-visible { outline: 3px solid rgba(106,76,245,.35); outli
 
 .dials { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px 32px; margin-top: 8px; }
 .dial label { display: flex; justify-content: space-between; font-size: .9rem; font-weight: 500; margin-bottom: 8px; }
-.dial output { color: var(--purple); font-variant-numeric: tabular-nums; }
+.dial output { color: var(--purple-text); font-variant-numeric: tabular-nums; }
 
 /* ---------- chemistry ---------- */
 .species { display: grid; gap: 14px; margin-top: 6px; }

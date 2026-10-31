@@ -239,6 +239,7 @@
     $('shellStatus').textContent = shellText(target.integ);
     $('yearRange').value = r.year;
     species(r);
+    if ($('dataTableBox').open) dataTable();
     chPh.draw && chPh.draw(); chOm.draw && chOm.draw();
     saveUrlSoon();
   }
@@ -262,6 +263,16 @@
       row.querySelector('.val').textContent = (pct >= 0 ? '+' : '−') + Math.abs(pct * 100).toFixed(pct > 0.1 ? 0 : 1) + '%';
     });
   }
+
+  /* data-table fallback: every tenth year plus the selected one, built only while open */
+  function dataTable() {
+    const scn = state.scenario === 'custom' ? 'Custom path' : PRESETS[state.scenario].label;
+    $('dataCaption').textContent = `${scn}, every 10 years. The selected year (${state.year}) is highlighted.`;
+    $('dataBody').innerHTML = rows.filter((r) => r.year % 10 === 0 || r.year === state.year).map((r) =>
+      `<tr${r.year === state.year ? ' class="now" aria-current="true"' : ''}><td>${r.year}</td><td>${Math.round(r.co2_ppm)}</td><td>${r.pH.toFixed(3)}</td>` +
+      `<td>${r.pH_lo.toFixed(3)}–${r.pH_hi.toFixed(3)}</td><td>${r.omega_arag.toFixed(2)}</td></tr>`).join('');
+  }
+  $('dataTableBox').addEventListener('toggle', () => { if ($('dataTableBox').open) dataTable(); });
 
   function recompute(fine) { rows = getRows(fine); render(); }
   function syncDials() {
@@ -308,7 +319,7 @@
     if (e.target.closest('input, select, textarea, [contenteditable]')) return;
     if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
       e.preventDefault(); stopPlay(); setYear(state.year + (e.key === 'ArrowRight' ? 1 : -1) * (e.shiftKey ? 10 : 1));
-    } else if (e.key === ' ' && !e.target.closest('button, a')) { e.preventDefault(); togglePlay(); }
+    } else if (e.key === ' ' && !e.target.closest('button, a, summary')) { e.preventDefault(); togglePlay(); }
   });
 
   /* ================= SHAREABLE LINKS ================= */
