@@ -26,6 +26,8 @@
 </head>
 <body>
 
+<a class="skip" href="#main">Skip to content</a>
+
 <aside class="rail">
   <a class="rail-logo" href="#overview" aria-label="Sour Seas home">
     <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8"/><path d="M6 18c3.3-3.3 6.7 3.3 10 0s6.7 3.3 10 0"/></svg>
@@ -43,7 +45,7 @@
   </a>
 </aside>
 
-<main>
+<main id="main" tabindex="-1">
 
   <!-- OVERVIEW -->
   <section id="overview">
@@ -172,13 +174,23 @@
           </div>
           <div class="chart-block">
             <div class="chart-title"><h3>Surface pH</h3><span class="legend"><i class="sw band"></i>90% parameter range <i class="sw ghost"></i>other scenarios</span></div>
-            <canvas id="chartPh" class="chart" role="img" aria-label="Line chart of modelled global surface pH from 1850 to 2100"></canvas>
+            <canvas id="chartPh" class="chart" role="img" aria-label="Line chart of modelled global surface pH from 1850 to 2100. The same values are in the data table below the charts."></canvas>
           </div>
           <div class="chart-block">
             <div class="chart-title"><h3>Aragonite saturation (Ω)</h3><span class="legend"><i class="sw ref"></i>Ω = 1</span></div>
-            <canvas id="chartOm" class="chart short" role="img" aria-label="Line chart of aragonite saturation state"></canvas>
+            <canvas id="chartOm" class="chart short" role="img" aria-label="Line chart of aragonite saturation state from 1850 to 2100. The same values are in the data table below the charts."></canvas>
           </div>
           <p class="note">Click or drag on a chart to move through time.</p>
+          <details class="data-table" id="dataTableBox">
+            <summary>Show the chart data as a table</summary>
+            <div class="table-wrap">
+              <table>
+                <caption id="dataCaption"></caption>
+                <thead><tr><th scope="col">Year</th><th scope="col">CO₂ (ppm)</th><th scope="col">pH</th><th scope="col">pH range (5–95%)</th><th scope="col">Aragonite Ω</th></tr></thead>
+                <tbody id="dataBody"></tbody>
+              </table>
+            </div>
+          </details>
         </div>
       </div>
     </div>
