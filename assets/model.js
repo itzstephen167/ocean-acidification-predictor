@@ -135,6 +135,19 @@
     });
   }
 
-  const api = { DEFAULTS, LAST_OBS_YEAR, PREINDUSTRIAL_PPM, solveCarbonate, oceanState, project, pchip };
+  /* ---------- sensor detection (years_to_detect_trend) ---------- */
+  // Ideal-electrode Nernst slope in V per pH unit, scaled by efficiency (as SensorParams.slope_v_per_ph).
+  const nernstSlope = (tempC = 18, efficiency = 0.98) => Math.LN10 * 8.314462618 * tk(tempC) / 96485.33212 * efficiency;
+  // Fewest years of annual means before a linear trend exceeds z standard errors, assuming independent noise (no drift).
+  function yearsToDetectTrend(noisePh, trendPerYr = -0.0017, z = 2.0, readingsPerYear = 1, maxYears = 500) {
+    const sigma = noisePh / Math.sqrt(readingsPerYear);
+    for (let n = 3; n <= maxYears; n++) {
+      const se = sigma * Math.sqrt(12.0 / (n * (n * n - 1)));
+      if (Math.abs(trendPerYr) / se >= z) return n;
+    }
+    return null;
+  }
+
+  const api = { DEFAULTS, LAST_OBS_YEAR, PREINDUSTRIAL_PPM, solveCarbonate, oceanState, project, pchip, nernstSlope, yearsToDetectTrend };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.OceanModel = api;
 })(typeof window !== 'undefined' ? window : globalThis);
