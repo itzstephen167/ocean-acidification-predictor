@@ -201,6 +201,15 @@
         <button class="btn soft small" id="resetBtn">Reset</button>
       </div>
       <p class="card-sub">Changing a setting re-runs the chemistry in your browser, including the uncertainty range. Try a cold, low-alkalinity sea.</p>
+      <div class="region-row">
+        <div class="seg" role="radiogroup" aria-label="Region preset" id="regionSeg">
+          <button role="radio" data-r="open">Open ocean</button>
+          <button role="radio" data-r="polar">Polar</button>
+          <button role="radio" data-r="tropical">Tropical</button>
+          <button role="radio" data-r="upwelling">Coastal upwelling</button>
+        </div>
+        <p class="region-note" id="regionNote"></p>
+      </div>
       <div class="dials">
         <div class="dial"><label for="sCo250">CO₂ in 2050 <output id="oCo250"></output></label><input type="range" id="sCo250" min="400" max="700" step="1"></div>
         <div class="dial"><label for="sCo2100">CO₂ in 2100 <output id="oCo2100"></output></label><input type="range" id="sCo2100" min="350" max="1400" step="1"></div>
