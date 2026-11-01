@@ -18,6 +18,13 @@
     low: D.meta.scenarios.low, intermediate: D.meta.scenarios.intermediate,
     high: D.meta.scenarios.high, very_high: D.meta.scenarios.very_high,
   };
+  // Typical surface values, rounded: a starting point for the dials, not measurements of any one place.
+  const REGIONS = {
+    open: { ta: 2300, temp: 18, note: 'The model default: a mid-latitude open-ocean surface.' },
+    polar: { ta: 2280, temp: 1, note: 'Cold water holds more CO₂, so polar seas start lower and reach corrosive levels first.' },
+    tropical: { ta: 2350, temp: 28, note: 'Warm, salty, high-alkalinity water: the best-buffered surface, but home to most coral reefs.' },
+    upwelling: { ta: 2230, temp: 12, note: 'Cool, lower-alkalinity water. The model keeps the surface in balance with the air, so it leaves out the CO₂-rich deep water that upwelling brings up and makes real upwelling zones more acidic still.' },
+  };
   const YEAR0 = 1850, YEAR1 = 2100;
 
   const state = { scenario: 'intermediate', co2_50: 485, co2_100: 600, ta: 2300, temp: 18, warm: 0, year: 2025 };
@@ -281,6 +288,9 @@
     $('oTa').textContent = state.ta + ' µmol/kg'; $('oTemp').textContent = state.temp.toFixed(1) + ' °C'; $('oWarm').textContent = '+' + state.warm.toFixed(2) + ' °C/decade';
     document.querySelectorAll('#scenarioSeg button').forEach((b) => { const on = b.dataset.s === state.scenario; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); });
     $('customBtn').hidden = state.scenario !== 'custom';
+    const region = Object.keys(REGIONS).find((k) => REGIONS[k].ta === state.ta && REGIONS[k].temp === state.temp);
+    document.querySelectorAll('#regionSeg button').forEach((b) => { const on = b.dataset.r === region; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); });
+    $('regionNote').textContent = region ? REGIONS[region].note : 'Your own mix of alkalinity and temperature.';
     const mod = !defaultParams() ? ' · modified ocean: ' + [state.ta !== 2300 && `TA ${state.ta}`, state.temp !== 18 && `${state.temp} °C`, state.warm && `+${state.warm}/decade warming`].filter(Boolean).join(', ') : '';
     $('scnDesc').textContent = (state.scenario === 'custom' ? `Your own path: ${state.co2_50} ppm in 2050, ${state.co2_100} ppm in 2100.` : SCN_DESC[state.scenario]) + mod;
   }
@@ -297,6 +307,9 @@
     el.addEventListener('change', () => recompute(true));
   };
   bindDial('sCo250', 'co2_50', true); bindDial('sCo2100', 'co2_100', true); bindDial('sTa', 'ta'); bindDial('sTemp', 'temp'); bindDial('sWarm', 'warm');
+  document.querySelectorAll('#regionSeg button').forEach((b) => b.addEventListener('click', () => {
+    const r = REGIONS[b.dataset.r]; state.ta = r.ta; state.temp = r.temp; syncDials(); recompute(true);
+  }));
   $('resetBtn').addEventListener('click', () => { Object.assign(state, { ta: 2300, temp: 18, warm: 0 }); pick('intermediate'); });
   $('yearRange').addEventListener('input', (e) => { stopPlay(); setYear(+e.target.value); });
 
