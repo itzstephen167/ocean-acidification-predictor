@@ -1,5 +1,9 @@
 # Sour Seas: ocean pH predictor site
 
+**Live site:** https://itzstephen167.github.io/ocean-acidification-predictor/
+
+![Ocean pH Predictor home page: key dates, change since pre-industrial times, and the 2100 outlook by emissions scenario](docs/screenshot.png)
+
 Static site, no build step.
 
 ```bash
