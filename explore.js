@@ -1,6 +1,6 @@
 (function () {
   'use strict';
-  const D = window.OCEAN_DATA, M = window.OceanModel;
+  const D = window.OCEAN_DATA, M = window.OceanModel, { PRESETS, YEAR0, YEAR1 } = window.OceanSite;
   const $ = (id) => document.getElementById(id);
   const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
   const lerp = (a, b, t) => a + (b - a) * t;
@@ -8,12 +8,6 @@
   const dpr = () => Math.min(window.devicePixelRatio || 1, 2);
 
   const hist = D.projections.low.filter((r) => r.phase === 'historical');
-  const PRESETS = {
-    low: { label: 'Low emissions', anchors: { 2050: 444, 2075: 442, 2100: 432 } },
-    intermediate: { label: 'Intermediate', anchors: { 2050: 485, 2075: 535, 2100: 600 } },
-    high: { label: 'High', anchors: { 2050: 510, 2075: 650, 2100: 850 } },
-    very_high: { label: 'Very high', anchors: { 2050: 545, 2075: 760, 2100: 1100 } },
-  };
   const SCN_DESC = {
     low: D.meta.scenarios.low, intermediate: D.meta.scenarios.intermediate,
     high: D.meta.scenarios.high, very_high: D.meta.scenarios.very_high,
@@ -25,7 +19,6 @@
     tropical: { ta: 2350, temp: 28, note: 'Warm, salty, high-alkalinity water: the best-buffered surface, but home to most coral reefs.' },
     upwelling: { ta: 2230, temp: 12, note: 'Cool, lower-alkalinity water. The model keeps the surface in balance with the air, so it leaves out the CO₂-rich deep water that upwelling brings up and makes real upwelling zones more acidic still.' },
   };
-  const YEAR0 = 1850, YEAR1 = 2100;
 
   const state = { scenario: 'intermediate', co2_50: 485, co2_100: 600, ta: 2300, temp: 18, warm: 0, year: 2025 };
   const defaultParams = () => state.ta === 2300 && state.temp === 18 && state.warm === 0;
@@ -363,7 +356,7 @@
   let urlTimer = 0;
   function saveUrlSoon() { clearTimeout(urlTimer); urlTimer = setTimeout(() => history.replaceState(null, '', shareUrl() + location.hash), 300); }
   $('shareBtn').addEventListener('click', () => {
-    const b = $('shareBtn'), url = location.origin + shareUrl() + '#explore';
+    const b = $('shareBtn'), url = location.origin + shareUrl();
     const done = (msg) => { b.textContent = msg; setTimeout(() => { b.textContent = 'Copy link'; }, 1600); };
     // The address bar always holds the same link, so point there if the clipboard is blocked.
     history.replaceState(null, '', shareUrl() + location.hash);
@@ -391,66 +384,6 @@
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   });
-
-  /* ================= SCENARIO ROWS ================= */
-  const goExplore = () => $('explore').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' });
-  function jump(s, year) { pick(s); setYear(year); goExplore(); }
-  $('bars').innerHTML = Object.keys(PRESETS).map((s) => {
-    const h = D.headline[s], w = ((h.pH_1850 - h.pH_2100) / 0.55 * 100).toFixed(1);
-    return `<div class="row scn-row">
-      <div class="row-name">${PRESETS[s].label}<span>${h.co2_ppm_2100.toLocaleString()} ppm CO₂ in 2100</span></div>
-      <div class="drop" title="pH drop since 1850"><i style="width:${w}%"></i></div>
-      <div><span class="badge">+${h.acidity_change_pct_2100.toFixed(0)}% acidity</span></div>
-      <div class="row-val">pH <b>${h.pH_2100.toFixed(2)}</b></div>
-      <div class="row-act"><button class="btn soft" data-jump="${s}" data-year="2100">Open</button></div>
-    </div>`;
-  }).join('');
-
-  /* ================= OVERVIEW ================= */
-  // Same rounding as the explorer readout, so the numbers agree.
-  const vhRows = D.projections.very_high, at = (y) => vhRows[y - YEAR0].pH.toFixed(2);
-  document.querySelectorAll('#keyDates [data-k]').forEach((b) => { b.textContent = at(+b.dataset.k.slice(3)); });
-  document.addEventListener('click', (e) => {
-    const b = e.target.closest('[data-jump]');
-    if (b) jump(b.dataset.jump, +b.dataset.year);
-  });
-  $('guess').addEventListener('change', (e) => {
-    const s = e.target.value, h = D.headline[s], out = $('guessAnswer');
-    out.hidden = false;
-    out.innerHTML = `On the <b>${PRESETS[s].label.toLowerCase()}</b> path, surface pH reaches <b>${h.pH_2100.toFixed(2)}</b> by 2100. The water would be ` +
-      `<b>${h.acidity_change_pct_2100.toFixed(0)}%</b> more acidic than pre-industrial, and aragonite Ω would fall to <b>${h.omega_arag_2100.toFixed(2)}</b>. ` +
-      `<button class="btn soft small" data-jump="${s}" data-year="2100">See it in the explorer</button>`;
-  });
-
-  // Highlight card: today vs 1850 on the observed record
-  const today = D.projections.intermediate[2025 - YEAR0], first = D.projections.intermediate[0];
-  $('hlAcid').textContent = '+' + today.acidity_change_pct.toFixed(0) + '%';
-  $('hlCo2').textContent = Math.round(today.co2_ppm);
-  $('hlDrop').textContent = (first.pH - today.pH).toFixed(2);
-  $('miniBars').innerHTML = Object.keys(PRESETS).map((s) => {
-    const h = D.headline[s];
-    return `<div class="mini-row"><span>${PRESETS[s].label}</span><div class="drop"><i style="width:${((h.pH_1850 - h.pH_2100) / 0.55 * 100).toFixed(1)}%"></i></div><b>${h.pH_2100.toFixed(2)}</b></div>`;
-  }).join('');
-
-  /* ================= SENSOR DETECTION ================= */
-  // Noise in mV is turned into pH through the default electrode slope, then the Python years_to_detect_trend logic runs.
-  const TREND = -0.0017;
-  function detect() {
-    const mv = +$('sNoise').value, n = +$('sReads').value, noisePh = mv / 1000 / M.nernstSlope();
-    const yrs = M.yearsToDetectTrend(noisePh, TREND, 2, n);
-    $('oNoise').textContent = mv.toFixed(1) + ' mV';
-    $('detectYears').textContent = yrs ? yrs + (yrs === 1 ? ' year' : ' years') : 'Over 500 years';
-    $('detectText').textContent = `of readings before the ${TREND.toString().replace('-', '−')} pH/yr trend clears two standard errors (noise ≈ ${noisePh.toFixed(4)} pH, no drift).`;
-  }
-  $('sNoise').addEventListener('input', detect); $('sReads').addEventListener('change', detect);
-  detect();
-
-  /* ================= NAV ================= */
-  const links = [...document.querySelectorAll('#nav a')];
-  const spy = new IntersectionObserver((es) => es.forEach((e) => {
-    if (e.isIntersecting) links.forEach((a) => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
-  }), { rootMargin: '-45% 0px -50% 0px' });
-  document.querySelectorAll('main > section').forEach((sec) => spy.observe(sec));
 
   loadUrl(); syncDials(); recompute(true);
   window.__ocean = { state, pick, setYear, getRows: () => rows, shareUrl, projectionCsv };

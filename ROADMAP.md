@@ -12,3 +12,14 @@ Small, self-contained improvements, done one at a time.
 - [x] 8. Sensor-detection calculator ("how many years until a sensor can see the trend?")
 - [x] 9. Region presets: polar, tropical, coastal upwelling
 - [ ] 10. Replace the built-in CO₂ history with the official NOAA Mauna Loa file
+
+## Pages and interactive features
+
+Keep the current look. These add to the design rather than replacing it.
+
+- [x] 11. Multi-page structure: move the explorer to `explore.html`, with the side rail linking between pages and shareable links still working
+- [ ] 12. Scenarios page: move the scenario rows to `scenarios.html` and let visitors overlay any two scenarios on one chart
+- [ ] 13. Chemistry page: move the species chart to `chemistry.html` and add a "pump in CO₂" control that shows carbonate species shifting step by step
+- [ ] 14. Methods page: move the checks, cautions, sensor calculator and downloads to `methods.html`
+- [ ] 15. Timeline page: scroll through 1850–2100 with the model's pH and Ω updating at each milestone year
+- [ ] 16. Quiz page: predict the model's result, then see the answer computed live
