@@ -15,8 +15,9 @@ Deploy by uploading this folder to any static host (Netlify, GitHub Pages, Verce
 
 | File | Role |
 |---|---|
-| `index.html`, `home.js` | Overview page: key dates, scenarios, model limits, downloads |
+| `index.html`, `home.js` | Overview page: key dates, model limits, downloads |
 | `explore.html`, `explore.js` | Explorer page: tank, charts, dials, chemistry |
+| `scenarios.html`, `scenarios.js` | Scenarios page: overlay any two emissions paths |
 | `common.js`, `styles.css` | Shared rail, scenario names and styling |
 | `assets/model.js` | JavaScript port of `ocean_ph_model.py` (matches Python to ≤0.00005 pH) |
 | `assets/data.js` | `projections.json` wrapped as `window.OCEAN_DATA` (file:// friendly) |

@@ -21,6 +21,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231f2433'/%3E%3Cpath d='M6 18c3.3-3.3 6.7 3.3 10 0s6.7 3.3 10 0' stroke='%2353d6c2' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
 <script>
   // Links from before the site had pages: send them to where that content lives now.
+  if (location.hash === '#scenarios') location.replace('scenarios.html');
   if (/[?&](s|y|ta|t|w|c50|c100)=/.test(location.search) || location.hash === '#explore' || location.hash === '#chemistry')
     location.replace('explore.html' + location.search + (location.hash === '#chemistry' ? location.hash : ''));
 </script>
@@ -40,7 +41,7 @@
   <nav class="rail-nav" id="nav" aria-label="Sections">
     <a href="index.html#overview" data-sec="overview" class="active" aria-label="Overview" title="Overview"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg></a>
     <a href="explore.html" data-sec="explore" aria-label="Explorer" title="Explorer"><svg viewBox="0 0 24 24"><path d="M2 9c2.5-2.5 5-2.5 7.5 0s5 2.5 7.5 0 3.5-2 5-1"/><path d="M2 15c2.5-2.5 5-2.5 7.5 0s5 2.5 7.5 0 3.5-2 5-1"/></svg></a>
-    <a href="index.html#scenarios" data-sec="scenarios" aria-label="Scenarios" title="Scenarios"><svg viewBox="0 0 24 24"><path d="M5 20V11M11 20V5M17 20v-6M3 20h18"/></svg></a>
+    <a href="scenarios.html" data-sec="scenarios" aria-label="Scenarios" title="Scenarios"><svg viewBox="0 0 24 24"><path d="M5 20V11M11 20V5M17 20v-6M3 20h18"/></svg></a>
     <a href="explore.html#chemistry" data-sec="chemistry" aria-label="Chemistry" title="Chemistry"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6L4.6 18.6A1.6 1.6 0 0 0 6 21h12a1.6 1.6 0 0 0 1.4-2.4L14 9V3M7 15h10"/></svg></a>
     <a href="index.html#limits" data-sec="limits" aria-label="Model limits" title="Model limits"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></a>
     <a href="index.html#get" data-sec="get" aria-label="Download" title="Download"><svg viewBox="0 0 24 24"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5M12 11v6M9 14l3 3 3-3"/></svg></a>
@@ -124,20 +125,11 @@
       <div class="card">
         <div class="card-head">
           <h2>2100 outlook</h2>
-          <a class="icon-btn" href="#scenarios" aria-label="Compare scenarios"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="icon-btn" href="scenarios.html" aria-label="Compare scenarios"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         </div>
         <div class="mini" id="miniBars"></div>
-        <a class="btn wide" href="#scenarios">Compare scenarios</a>
+        <a class="btn wide" href="scenarios.html">Compare scenarios</a>
       </div>
-    </div>
-  </section>
-
-  <!-- SCENARIOS -->
-  <section id="scenarios">
-    <div class="card">
-      <div class="card-head"><h2>Scenarios</h2></div>
-      <p class="card-sub">Surface pH in 2100 by emissions path. The paths are rounded, SSP-like illustrations.</p>
-      <div class="rows" id="bars"></div>
     </div>
   </section>
 

@@ -1,20 +1,8 @@
-// The overview page: key dates, the prediction card, scenario rows and the sensor calculator.
+// The overview page: key dates, the prediction card and the sensor calculator.
 (function () {
   'use strict';
   const D = window.OCEAN_DATA, M = window.OceanModel, { PRESETS, YEAR0 } = window.OceanSite;
   const $ = (id) => document.getElementById(id);
-
-  /* ================= SCENARIO ROWS ================= */
-  $('bars').innerHTML = Object.keys(PRESETS).map((s) => {
-    const h = D.headline[s], w = ((h.pH_1850 - h.pH_2100) / 0.55 * 100).toFixed(1);
-    return `<div class="row scn-row">
-      <div class="row-name">${PRESETS[s].label}<span>${h.co2_ppm_2100.toLocaleString()} ppm CO₂ in 2100</span></div>
-      <div class="drop" title="pH drop since 1850"><i style="width:${w}%"></i></div>
-      <div><span class="badge">+${h.acidity_change_pct_2100.toFixed(0)}% acidity</span></div>
-      <div class="row-val">pH <b>${h.pH_2100.toFixed(2)}</b></div>
-      <div class="row-act"><a class="btn soft" href="explore.html?s=${s}&y=2100">Open</a></div>
-    </div>`;
-  }).join('');
 
   /* ================= OVERVIEW ================= */
   // Same rounding as the explorer readout, so the numbers agree.
