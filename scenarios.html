@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scenarios — Sour Seas</title>
+<meta name="description" content="Overlay any two emissions paths on one chart and compare surface ocean pH and aragonite saturation from 1850 to 2100.">
+<link rel="canonical" href="https://itzstephen167.github.io/ocean-acidification-predictor/scenarios.html">
+<!-- Link previews (Open Graph for most apps, Twitter card for X) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sour Seas">
+<meta property="og:title" content="Scenarios — Sour Seas">
+<meta property="og:description" content="Overlay any two emissions paths on one chart and compare surface ocean pH and aragonite saturation from 1850 to 2100.">
+<meta property="og:url" content="https://itzstephen167.github.io/ocean-acidification-predictor/scenarios.html">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Scenarios — Sour Seas">
+<meta name="twitter:description" content="Overlay any two emissions paths on one chart and compare surface ocean pH and aragonite saturation from 1850 to 2100.">
+<meta name="theme-color" content="#6a4cf5">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231f2433'/%3E%3Cpath d='M6 18c3.3-3.3 6.7 3.3 10 0s6.7 3.3 10 0' stroke='%2353d6c2' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<aside class="rail">
+  <a class="rail-logo" href="index.html#overview" aria-label="Sour Seas home">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8"/><path d="M6 18c3.3-3.3 6.7 3.3 10 0s6.7 3.3 10 0"/></svg>
+  </a>
+  <nav class="rail-nav" id="nav" aria-label="Sections">
+    <a href="index.html#overview" data-sec="overview" aria-label="Overview" title="Overview"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg></a>
+    <a href="explore.html" data-sec="explore" aria-label="Explorer" title="Explorer"><svg viewBox="0 0 24 24"><path d="M2 9c2.5-2.5 5-2.5 7.5 0s5 2.5 7.5 0 3.5-2 5-1"/><path d="M2 15c2.5-2.5 5-2.5 7.5 0s5 2.5 7.5 0 3.5-2 5-1"/></svg></a>
+    <a href="scenarios.html" data-sec="scenarios" class="active" aria-label="Scenarios" title="Scenarios"><svg viewBox="0 0 24 24"><path d="M5 20V11M11 20V5M17 20v-6M3 20h18"/></svg></a>
+    <a href="explore.html#chemistry" data-sec="chemistry" aria-label="Chemistry" title="Chemistry"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6L4.6 18.6A1.6 1.6 0 0 0 6 21h12a1.6 1.6 0 0 0 1.4-2.4L14 9V3M7 15h10"/></svg></a>
+    <a href="index.html#limits" data-sec="limits" aria-label="Model limits" title="Model limits"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></a>
+    <a href="index.html#get" data-sec="get" aria-label="Download" title="Download"><svg viewBox="0 0 24 24"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5M12 11v6M9 14l3 3 3-3"/></svg></a>
+  </nav>
+  <a class="rail-gh" href="https://github.com/itzstephen167/ocean-acidification-predictor" aria-label="View source on GitHub" title="View source on GitHub">
+    <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+  </a>
+</aside>
+
+<main id="main" tabindex="-1">
+
+  <!-- SCENARIOS -->
+  <section id="scenarios">
+    <div class="page-head">
+      <div>
+        <h1>Scenarios</h1>
+        <p class="sub">Put any two emissions paths on one chart and see where they part ways.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h2>Compare two paths</h2>
+        <div class="seg" role="radiogroup" aria-label="Measure to chart" id="metricSeg">
+          <button role="radio" data-m="pH">Surface pH</button>
+          <button role="radio" data-m="omega">Aragonite Ω</button>
+        </div>
+      </div>
+      <div class="pick-row">
+        <div class="pick">
+          <span class="pick-label"><i class="sw line-a"></i>First path</span>
+          <div class="seg" role="radiogroup" aria-label="First path" id="segA"></div>
+        </div>
+        <div class="pick">
+          <span class="pick-label"><i class="sw line-b"></i>Second path</span>
+          <div class="seg" role="radiogroup" aria-label="Second path" id="segB"></div>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat"><span class="k">Year</span><span class="v" id="cmpYear">–</span><span class="u" id="cmpPhase"></span></div>
+        <div class="stat"><span class="k" id="cmpNameA"></span><span class="v" id="cmpA">–</span><span class="u" id="cmpCo2A"></span></div>
+        <div class="stat"><span class="k" id="cmpNameB"></span><span class="v" id="cmpB">–</span><span class="u" id="cmpCo2B"></span></div>
+        <div class="stat"><span class="k">Gap between them</span><span class="v" id="cmpGap">–</span><span class="u" id="cmpGapUnit"></span></div>
+      </div>
+      <div class="chart-block">
+        <div class="chart-title"><h3 id="cmpTitle"></h3><span class="legend"><i class="sw ref" id="cmpRefSw"></i><span id="cmpRefText"></span></span></div>
+        <canvas id="cmpChart" class="chart tall" role="img" aria-label="Line chart comparing the two chosen emissions paths from 1850 to 2100. The same values are in the data table below."></canvas>
+      </div>
+      <div class="scrub">
+        <label for="cmpRange">Year</label>
+        <input type="range" id="cmpRange" min="1850" max="2100" step="1">
+        <button class="btn soft small" id="cmpShare" title="Copy a link to this comparison">Copy link</button>
+      </div>
+      <p class="note">Click or drag on the chart to move through time. The shading is each path's 90% parameter range. The paths share one record up to 2025.</p>
+      <details class="data-table" id="cmpTableBox">
+        <summary>Show the chart data as a table</summary>
+        <div class="table-wrap">
+          <table>
+            <caption id="cmpCaption"></caption>
+            <thead><tr><th scope="col">Year</th><th scope="col" id="cmpHeadA"></th><th scope="col" id="cmpHeadB"></th><th scope="col">Gap</th></tr></thead>
+            <tbody id="cmpBody"></tbody>
+          </table>
+        </div>
+      </details>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h2>All four paths in 2100</h2></div>
+      <p class="card-sub">Surface pH in 2100 by emissions path. The paths are rounded, SSP-like illustrations.</p>
+      <div class="rows" id="bars"></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>© 2026 Sour Seas · Built by Stephen Apemah-Baah</span>
+    <span>Constants: Weiss 1974, Lueker et al. 2000, Dickson 1990, Millero 1995, Mucci 1983, Lee et al. 2010</span>
+  </footer>
+</main>
+
+<script src="assets/data.js"></script>
+<script src="common.js"></script>
+<script src="scenarios.js"></script>
+</body>
+</html>

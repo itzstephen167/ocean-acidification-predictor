@@ -205,6 +205,12 @@ select { width: 100%; appearance: none; font: 400 .95rem var(--sans); color: var
 .sw.ref { height: 0; border-top: 2px dashed #e5484d; }
 .chart { width: 100%; height: 250px; display: block; touch-action: pan-y; cursor: ew-resize; border-radius: 14px; background: var(--surface); }
 .chart.short { height: 180px; }
+.chart.tall { height: 340px; }
+.pick-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 20px; margin: 14px 0 22px; }
+@media (max-width: 860px) { .pick-row { grid-template-columns: 1fr; } }
+.pick-label { display: flex; align-items: center; gap: 8px; font-weight: 500; font-size: .9rem; margin-bottom: 8px; }
+.sw.line-a { height: 0; border-top: 3px solid #6a4cf5; }
+.sw.line-b { height: 0; border-top: 3px dashed #f2734f; }
 
 /* Data-table fallback for the two canvas charts */
 .data-table { margin-top: 14px; }
