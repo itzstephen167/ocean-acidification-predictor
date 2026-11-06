@@ -36,7 +36,6 @@
     }
     return cache.get(key);
   }
-  const params = () => ({ ta: state.ta, temp: state.temp, warming: state.warm });
 
   /* ---------- colour from pH ---------- */
   const STOPS = [[8.18, [18, 150, 182], [4, 40, 70]], [8.0, [28, 150, 160], [5, 42, 62]], [7.85, [96, 160, 110], [14, 52, 52]], [7.68, [196, 150, 62], [44, 40, 24]]];
@@ -238,31 +237,11 @@
     target.ph = r.pH; target.co2 = r.co2_ppm; target.integ = integrityOf(r.omega_arag);
     $('shellStatus').textContent = shellText(target.integ);
     $('yearRange').value = r.year;
-    species(r);
     if ($('dataTableBox').open) dataTable();
     chPh.draw && chPh.draw(); chOm.draw && chOm.draw();
     saveUrlSoon();
   }
   function setYear(y) { state.year = clamp(y, YEAR0, YEAR1); readout(); }
-
-  function species(r) {
-    const p = Object.assign({}, M.DEFAULTS, params()), base = M.oceanState(p.ref, 2025, p), now = M.oceanState(r.co2_ppm, r.year, p);
-    const items = [
-      ['Dissolved CO₂', 'CO₂(aq)', now.co2aq / base.co2aq - 1, '#f2734f'],
-      ['Bicarbonate', 'HCO₃⁻', now.hco3 / base.hco3 - 1, '#13a89e'],
-      ['Carbonate', 'CO₃²⁻ · builds shells', now.co3 / base.co3 - 1, '#e0a400'],
-      ['Hydrogen ions', 'H⁺ · acidity', now.h / base.h - 1, '#8d48e6'],
-    ];
-    $('specYear').textContent = r.year;
-    const el = $('species');
-    if (!el.children.length) el.innerHTML = items.map(() => '<div class="sp"><div class="nm"></div><div class="axis"><i></i></div><div class="val"></div></div>').join('');
-    items.forEach(([n, sub, pct, col], i) => {
-      const row = el.children[i], f = Math.sign(pct) * Math.log1p(Math.abs(pct) * 10) / Math.log1p(25) * 50, bar = row.querySelector('i');
-      row.querySelector('.nm').innerHTML = `${n}<small>${sub}</small>`;
-      bar.style.background = col; bar.style.left = (f >= 0 ? 50 : 50 + f) + '%'; bar.style.width = Math.abs(clamp(f, -50, 50)) + '%';
-      row.querySelector('.val').textContent = (pct >= 0 ? '+' : '−') + Math.abs(pct * 100).toFixed(pct > 0.1 ? 0 : 1) + '%';
-    });
-  }
 
   /* data-table fallback: every tenth year plus the selected one, built only while open */
   function dataTable() {

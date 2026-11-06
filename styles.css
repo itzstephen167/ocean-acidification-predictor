@@ -235,6 +235,19 @@ input[type=range]:focus-visible { outline: 3px solid rgba(106,76,245,.35); outli
 .dial output { color: var(--purple-text); font-variant-numeric: tabular-nums; }
 
 /* ---------- chemistry ---------- */
+.pump-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 16px 0 20px; }
+.pump-scrub { flex: 1 1 240px; margin-top: 0; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.react-steps { list-style: none; counter-reset: react; margin: 0 0 22px; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 860px) { .react-steps { grid-template-columns: 1fr; } }
+.react-steps li { counter-increment: react; background: var(--surface); border-radius: 14px; padding: 12px 14px; border: 2px solid transparent; transition: border-color .2s; }
+.react-steps b { display: block; font-weight: 600; font-size: .92rem; margin-bottom: 2px; }
+.react-steps b::before { content: counter(react) ". "; color: var(--muted); }
+.react-steps span { display: block; font-size: .84rem; color: var(--muted); min-height: 1.3em; }
+.react-steps li.now { border-color: var(--purple); }
+.react-steps li.done b::before { color: var(--purple-text); }
+.species-title { margin-bottom: 10px; }
+.steps-head { margin: 28px 0 0; }
 .species { display: grid; gap: 14px; margin-top: 6px; }
 .sp { display: grid; grid-template-columns: 170px 1fr 80px; gap: 16px; align-items: center; }
 .sp .nm { font-weight: 500; line-height: 1.3; }
