@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chemistry — Sour Seas</title>
+<meta name="description" content="Pump CO₂ into seawater and watch carbonate, bicarbonate and hydrogen ions shift, using the Sour Seas ocean chemistry model.">
+<link rel="canonical" href="https://itzstephen167.github.io/ocean-acidification-predictor/chemistry.html">
+<!-- Link previews (Open Graph for most apps, Twitter card for X) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sour Seas">
+<meta property="og:title" content="Chemistry — Sour Seas">
+<meta property="og:description" content="Pump CO₂ into seawater and watch carbonate, bicarbonate and hydrogen ions shift, using the Sour Seas ocean chemistry model.">
+<meta property="og:url" content="https://itzstephen167.github.io/ocean-acidification-predictor/chemistry.html">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chemistry — Sour Seas">
+<meta name="twitter:description" content="Pump CO₂ into seawater and watch carbonate, bicarbonate and hydrogen ions shift, using the Sour Seas ocean chemistry model.">
+<meta name="theme-color" content="#6a4cf5">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231f2433'/%3E%3Cpath d='M6 18c3.3-3.3 6.7 3.3 10 0s6.7 3.3 10 0' stroke='%2353d6c2' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<aside class="rail">
+  <a class="rail-logo" href="index.html#overview" aria-label="Sour Seas home">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8"/><path d="M6 18c3.3-3.3 6.7 3.3 10 0s6.7 3.3 10 0"/></svg>
+  </a>
+  <nav class="rail-nav" id="nav" aria-label="Sections">
+    <a href="index.html#overview" data-sec="overview" aria-label="Overview" title="Overview"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg></a>
+    <a href="explore.html" data-sec="explore" aria-label="Explorer" title="Explorer"><svg viewBox="0 0 24 24"><path d="M2 9c2.5-2.5 5-2.5 7.5 0s5 2.5 7.5 0 3.5-2 5-1"/><path d="M2 15c2.5-2.5 5-2.5 7.5 0s5 2.5 7.5 0 3.5-2 5-1"/></svg></a>
+    <a href="scenarios.html" data-sec="scenarios" aria-label="Scenarios" title="Scenarios"><svg viewBox="0 0 24 24"><path d="M5 20V11M11 20V5M17 20v-6M3 20h18"/></svg></a>
+    <a href="chemistry.html" data-sec="chemistry" class="active" aria-label="Chemistry" title="Chemistry"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6L4.6 18.6A1.6 1.6 0 0 0 6 21h12a1.6 1.6 0 0 0 1.4-2.4L14 9V3M7 15h10"/></svg></a>
+    <a href="index.html#limits" data-sec="limits" aria-label="Model limits" title="Model limits"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></a>
+    <a href="index.html#get" data-sec="get" aria-label="Download" title="Download"><svg viewBox="0 0 24 24"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5M12 11v6M9 14l3 3 3-3"/></svg></a>
+  </nav>
+  <a class="rail-gh" href="https://github.com/itzstephen167/ocean-acidification-predictor" aria-label="View source on GitHub" title="View source on GitHub">
+    <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+  </a>
+</aside>
+
+<main id="main" tabindex="-1">
+
+  <!-- CHEMISTRY -->
+  <section id="chemistry">
+    <div class="page-head">
+      <div>
+        <h1>Chemistry</h1>
+        <p class="sub">Raise the CO₂ in the air above the sea and watch what the water does, step by step.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h2>Pump in CO₂</h2>
+        <div class="seg" role="group" aria-label="Jump to a CO₂ level" id="co2Seg"></div>
+      </div>
+      <p class="card-sub">CO₂ reacts with carbonate ions: <code>CO₂ + CO₃²⁻ + H₂O → 2 HCO₃⁻</code>. Carbonate, which shells are built from, gets used up and hydrogen ions build up.</p>
+      <div class="pump-row">
+        <button class="btn primary" id="pumpBtn">Pump in 50 ppm</button>
+        <button class="btn soft" id="pumpReset">Reset</button>
+        <div class="scrub pump-scrub">
+          <label for="co2Range">CO₂</label>
+          <input type="range" id="co2Range" step="1">
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat"><span class="k">Atmospheric CO₂</span><span class="v" id="chCo2">–</span><span class="u">ppm</span></div>
+        <div class="stat"><span class="k">Surface pH</span><span class="v" id="chPh">–</span><span class="u" id="chPhDelta"></span></div>
+        <div class="stat"><span class="k">Carbonate</span><span class="v" id="chCo3">–</span><span class="u">µmol/kg</span></div>
+        <div class="stat"><span class="k">Aragonite Ω</span><span class="v" id="chOmega">–</span><span class="u">below 1, shells dissolve</span></div>
+      </div>
+      <ol class="react-steps" id="reactSteps" aria-live="polite">
+        <li data-step="1"><b>CO₂ dissolves</b><span id="stepCo2">Pump some in to begin.</span></li>
+        <li data-step="2"><b>Carbonate is used up</b><span id="stepCo3"></span></li>
+        <li data-step="3"><b>Acidity rises</b><span id="stepH"></span></li>
+      </ol>
+      <div class="chart-title species-title"><h3>Change against pre-industrial water</h3></div>
+      <div class="species" id="species"></div>
+      <p class="note">Bars use a compressed scale so small and large changes both stay visible. In the sea these steps happen together; they are shown one at a time for clarity, and every number comes from the model's solution at the new CO₂ level (18 °C, default alkalinity). Pre-industrial here is the model's 278 ppm baseline, slightly below the 285 ppm record for 1850.</p>
+    </div>
+
+    <div class="card-head steps-head"><h2>How the model solves it</h2></div>
+    <div class="grid3">
+      <div class="card step-card"><span class="num">1</span><h3>Air meets water</h3><p>Surface water takes up a set share of the rise in atmospheric CO₂. That share, 89%, is calibrated to the observed 1985–2022 pH trend.</p></div>
+      <div class="card step-card"><span class="num">2</span><h3>Solve for H⁺</h3><p>Given alkalinity and CO₂, the model searches for the hydrogen-ion concentration that balances carbonate, borate and water charges.</p></div>
+      <div class="card step-card"><span class="num">3</span><h3>Read the outputs</h3><p>pH, dissolved inorganic carbon, carbonate, and Ω: calcium × carbonate over aragonite's solubility product.</p></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>© 2026 Sour Seas · Built by Stephen Apemah-Baah</span>
+    <span>Constants: Weiss 1974, Lueker et al. 2000, Dickson 1990, Millero 1995, Mucci 1983, Lee et al. 2010</span>
+  </footer>
+</main>
+
+<script src="assets/data.js"></script>
+<script src="assets/model.js"></script>
+<script src="common.js"></script>
+<script src="chemistry.js"></script>
+</body>
+</html>
