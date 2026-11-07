@@ -15,10 +15,11 @@ Deploy by uploading this folder to any static host (Netlify, GitHub Pages, Verce
 
 | File | Role |
 |---|---|
-| `index.html`, `home.js` | Overview page: key dates, model limits, downloads |
+| `index.html`, `home.js` | Overview page: key dates, prediction card, 2100 outlook |
 | `explore.html`, `explore.js` | Explorer page: tank, charts, dials |
 | `scenarios.html`, `scenarios.js` | Scenarios page: overlay any two emissions paths |
 | `chemistry.html`, `chemistry.js` | Chemistry page: pump in CO₂ and watch the carbonate system shift |
+| `methods.html`, `methods.js` | Methods page: checks, cautions, sensor calculator, downloads |
 | `common.js`, `styles.css` | Shared rail, scenario names and styling |
 | `assets/model.js` | JavaScript port of `ocean_ph_model.py` (matches Python to ≤0.00005 pH) |
 | `assets/data.js` | `projections.json` wrapped as `window.OCEAN_DATA` (file:// friendly) |

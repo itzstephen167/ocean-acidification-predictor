@@ -1,7 +1,7 @@
-// The overview page: key dates, the prediction card and the sensor calculator.
+// The overview page: key dates and the prediction card.
 (function () {
   'use strict';
-  const D = window.OCEAN_DATA, M = window.OceanModel, { PRESETS, YEAR0 } = window.OceanSite;
+  const D = window.OCEAN_DATA, { PRESETS, YEAR0 } = window.OceanSite;
   const $ = (id) => document.getElementById(id);
 
   /* ================= OVERVIEW ================= */
@@ -25,17 +25,4 @@
     const h = D.headline[s];
     return `<div class="mini-row"><span>${PRESETS[s].label}</span><div class="drop"><i style="width:${((h.pH_1850 - h.pH_2100) / 0.55 * 100).toFixed(1)}%"></i></div><b>${h.pH_2100.toFixed(2)}</b></div>`;
   }).join('');
-
-  /* ================= SENSOR DETECTION ================= */
-  // Noise in mV is turned into pH through the default electrode slope, then the Python years_to_detect_trend logic runs.
-  const TREND = -0.0017;
-  function detect() {
-    const mv = +$('sNoise').value, n = +$('sReads').value, noisePh = mv / 1000 / M.nernstSlope();
-    const yrs = M.yearsToDetectTrend(noisePh, TREND, 2, n);
-    $('oNoise').textContent = mv.toFixed(1) + ' mV';
-    $('detectYears').textContent = yrs ? yrs + (yrs === 1 ? ' year' : ' years') : 'Over 500 years';
-    $('detectText').textContent = `of readings before the ${TREND.toString().replace('-', '−')} pH/yr trend clears two standard errors (noise ≈ ${noisePh.toFixed(4)} pH, no drift).`;
-  }
-  $('sNoise').addEventListener('input', detect); $('sReads').addEventListener('change', detect);
-  detect();
 })();
