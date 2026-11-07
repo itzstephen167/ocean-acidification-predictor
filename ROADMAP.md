@@ -20,6 +20,6 @@ Keep the current look. These add to the design rather than replacing it.
 - [x] 11. Multi-page structure: move the explorer to `explore.html`, with the side rail linking between pages and shareable links still working
 - [x] 12. Scenarios page: move the scenario rows to `scenarios.html` and let visitors overlay any two scenarios on one chart
 - [x] 13. Chemistry page: move the species chart to `chemistry.html` and add a "pump in CO₂" control that shows carbonate species shifting step by step
-- [ ] 14. Methods page: move the checks, cautions, sensor calculator and downloads to `methods.html`
+- [x] 14. Methods page: move the checks, cautions, sensor calculator and downloads to `methods.html`
 - [ ] 15. Timeline page: scroll through 1850–2100 with the model's pH and Ω updating at each milestone year
 - [ ] 16. Quiz page: predict the model's result, then see the answer computed live

@@ -23,6 +23,7 @@
   // Links from before the site had pages: send them to where that content lives now.
   if (location.hash === '#scenarios') location.replace('scenarios.html');
   else if (location.hash === '#chemistry') location.replace('chemistry.html');
+  else if (location.hash === '#limits' || location.hash === '#get') location.replace('methods.html' + location.hash);
   else if (/[?&](s|y|ta|t|w|c50|c100)=/.test(location.search) || location.hash === '#explore') location.replace('explore.html' + location.search);
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -43,8 +44,8 @@
     <a href="explore.html" data-sec="explore" aria-label="Explorer" title="Explorer"><svg viewBox="0 0 24 24"><path d="M2 9c2.5-2.5 5-2.5 7.5 0s5 2.5 7.5 0 3.5-2 5-1"/><path d="M2 15c2.5-2.5 5-2.5 7.5 0s5 2.5 7.5 0 3.5-2 5-1"/></svg></a>
     <a href="scenarios.html" data-sec="scenarios" aria-label="Scenarios" title="Scenarios"><svg viewBox="0 0 24 24"><path d="M5 20V11M11 20V5M17 20v-6M3 20h18"/></svg></a>
     <a href="chemistry.html" data-sec="chemistry" aria-label="Chemistry" title="Chemistry"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6L4.6 18.6A1.6 1.6 0 0 0 6 21h12a1.6 1.6 0 0 0 1.4-2.4L14 9V3M7 15h10"/></svg></a>
-    <a href="index.html#limits" data-sec="limits" aria-label="Model limits" title="Model limits"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></a>
-    <a href="index.html#get" data-sec="get" aria-label="Download" title="Download"><svg viewBox="0 0 24 24"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5M12 11v6M9 14l3 3 3-3"/></svg></a>
+    <a href="methods.html#limits" data-sec="limits" aria-label="Methods" title="Methods"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></a>
+    <a href="methods.html#get" data-sec="get" aria-label="Download" title="Download"><svg viewBox="0 0 24 24"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5M12 11v6M9 14l3 3 3-3"/></svg></a>
   </nav>
   <a class="rail-gh" href="https://github.com/itzstephen167/ocean-acidification-predictor" aria-label="View source on GitHub" title="View source on GitHub">
     <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
@@ -133,62 +134,6 @@
     </div>
   </section>
 
-  <!-- LIMITS -->
-  <section id="limits">
-    <div class="grid3">
-      <article class="card">
-        <div class="card-head"><h2>Checks it passes</h2><span class="badge teal">Validated</span></div>
-        <ul class="list">
-          <li>Calibrated to one number: the 1985–2022 trend of −0.0017 pH per year (Copernicus Marine).</li>
-          <li>Untuned: pH change 1850–2022 is −0.125, against a published ≈ −0.1.</li>
-          <li>Untuned: Revelle factor 10.6, inside the typical 8–14 range.</li>
-          <li>Very high scenario reaches pH 7.70 by 2100, in line with published projections.</li>
-        </ul>
-      </article>
-      <article class="card">
-        <div class="card-head"><h2>Be careful with</h2><span class="badge">Caution</span></div>
-        <ul class="list">
-          <li>One global-mean surface box. Cold, upwelling and coastal waters sit well away from 8.04.</li>
-          <li>The shaded range is parameter uncertainty only. It leaves out scenario choice, regional differences and natural variability.</li>
-          <li>Not modelled: changing alkalinity or circulation, biology, minor ions.</li>
-          <li>CO₂ history approximates Mauna Loa; scenarios are SSP-like.</li>
-        </ul>
-      </article>
-      <article class="card">
-        <div class="card-head"><h2>Can a sensor see this?</h2><span class="badge purple">Sensor</span></div>
-        <p class="body">The model repo includes a pH-electrode simulator. A drift of only <b>0.1 mV per year</b> looks the same as the whole global acidification trend, so detecting it depends on careful calibration.</p>
-        <div class="detect">
-          <div class="dial"><label for="sNoise">Sensor noise per reading <output id="oNoise"></output></label><input type="range" id="sNoise" min="0.1" max="5" step="0.1" value="0.3"></div>
-          <div class="dial"><label for="sReads">Readings per year</label>
-            <div class="select-wrap"><select id="sReads"><option value="1" selected>1 (annual)</option><option value="12">12 (monthly)</option><option value="52">52 (weekly)</option><option value="365">365 (daily)</option></select></div>
-          </div>
-          <p class="detect-out" aria-live="polite"><span class="big-sm" id="detectYears">–</span> <span id="detectText"></span></p>
-        </div>
-        <p class="note">Noise and drift values are simulation inputs, not specs of any real product.</p>
-      </article>
-    </div>
-  </section>
-
-  <!-- DOWNLOAD -->
-  <section id="get">
-    <div class="card">
-      <div class="card-head">
-        <h2>Model files</h2>
-        <a class="icon-btn" href="https://github.com/itzstephen167/ocean-acidification-predictor" aria-label="Open repository"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-      </div>
-      <div class="rows files">
-        <div class="row"><div class="row-name mono">ocean_ph_model.py<span>The model. No plotting, no I/O on import.</span></div><div><span class="badge">Python</span></div><div class="row-act"><a class="btn soft" href="assets/ocean_ph_model.py" download>Download</a></div></div>
-        <div class="row"><div class="row-name mono">Notebook (.ipynb)<span>Walkthrough with outputs already run.</span></div><div><span class="badge">Jupyter</span></div><div class="row-act"><a class="btn soft" href="assets/Predicting_Ocean_pH_Under_Rising_CO2_Conditions.ipynb" download>Download</a></div></div>
-        <div class="row"><div class="row-name mono">projections.json<span>All four scenarios with metadata.</span></div><div><span class="badge">Data</span></div><div class="row-act"><a class="btn soft" href="assets/projections.json" download>Download</a></div></div>
-        <div class="row"><div class="row-name mono">test_ocean_ph_model.py<span>13 tests, run with pytest.</span></div><div><span class="badge">Tests</span></div><div class="row-act"><a class="btn soft" href="assets/test_ocean_ph_model.py" download>Download</a></div></div>
-      </div>
-      <pre class="code"><code>import ocean_ph_model as m
-df = m.project("intermediate")                 # year, co2_ppm, pH, pH_lo, pH_hi, omega_arag …
-m.project({2050: 500, 2100: 700})              # your own CO₂ path
-m.project("high", m.OceanParams(ta_umol_kg=2250, temp_c=22))   # a different region</code></pre>
-    </div>
-  </section>
-
   <footer>
     <span>© 2026 Sour Seas · Built by Stephen Apemah-Baah</span>
     <span>Constants: Weiss 1974, Lueker et al. 2000, Dickson 1990, Millero 1995, Mucci 1983, Lee et al. 2010</span>
@@ -196,7 +141,6 @@ m.project("high", m.OceanParams(ta_umol_kg=2250, temp_c=22))   # a different reg
 </main>
 
 <script src="assets/data.js"></script>
-<script src="assets/model.js"></script>
 <script src="common.js"></script>
 <script src="home.js"></script>
 </body>
