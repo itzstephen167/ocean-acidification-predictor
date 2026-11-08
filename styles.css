@@ -261,6 +261,30 @@ input[type=range]:focus-visible { outline: 3px solid rgba(106,76,245,.35); outli
 .step-card h3 { font-size: 1.05rem; margin-bottom: 6px; }
 .step-card p { margin: 0; color: var(--muted); font-size: .92rem; }
 
+/* ---------- timeline ---------- */
+.tl-stage { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+.tl-readout { position: sticky; top: 24px; }
+.tl-year-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.tl-year { font: 600 2.6rem/1.1 var(--display); font-variant-numeric: tabular-nums; }
+.tl-track { height: 8px; border-radius: 4px; background: var(--surface); overflow: hidden; margin: 14px 0 20px; }
+.tl-track i { display: block; height: 100%; border-radius: 4px; background: var(--purple); transition: width .3s; }
+.tl-readout .stats { grid-template-columns: repeat(2, 1fr); margin-bottom: 0; }
+.tl-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 28px; }
+.tl-item { min-height: 46vh; border: 2px solid transparent; transition: border-color .2s; cursor: pointer; }
+.tl-item.now { border-color: var(--purple); }
+.tl-item .card-head h2 { font-size: 1.6rem; }
+@media (max-width: 860px) {
+  .tl-stage { grid-template-columns: 1fr; gap: 20px; }
+  .tl-readout { top: 72px; z-index: 5; padding: 16px 18px; }
+  .tl-year { font-size: 1.8rem; }
+  .tl-track { margin: 10px 0 12px; }
+  .tl-readout .stats { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .tl-readout .stat { padding: 8px 10px; }
+  .tl-readout .stat .k { min-height: 0; font-size: .68rem; }
+  .tl-readout .stat .u, .tl-readout .note { display: none; }
+  .tl-item { min-height: 36vh; }
+}
+
 /* ---------- limits ---------- */
 #limits .card-head h2 { font-size: 1.08rem; }
 /* sensor-detection calculator */
