@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quiz — Sour Seas</title>
+<meta name="description" content="Guess the ocean's pH or aragonite saturation for a given year and emissions path, then see the Sour Seas model compute the answer live.">
+<link rel="canonical" href="https://itzstephen167.github.io/ocean-acidification-predictor/quiz.html">
+<!-- Link previews (Open Graph for most apps, Twitter card for X) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sour Seas">
+<meta property="og:title" content="Quiz — Sour Seas">
+<meta property="og:description" content="Guess the ocean's pH or aragonite saturation for a given year and emissions path, then see the Sour Seas model compute the answer live.">
+<meta property="og:url" content="https://itzstephen167.github.io/ocean-acidification-predictor/quiz.html">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Quiz — Sour Seas">
+<meta name="twitter:description" content="Guess the ocean's pH or aragonite saturation for a given year and emissions path, then see the Sour Seas model compute the answer live.">
+<meta name="theme-color" content="#6a4cf5">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231f2433'/%3E%3Cpath d='M6 18c3.3-3.3 6.7 3.3 10 0s6.7 3.3 10 0' stroke='%2353d6c2' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<aside class="rail">
+  <a class="rail-logo" href="index.html#overview" aria-label="Sour Seas home">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8"/><path d="M6 18c3.3-3.3 6.7 3.3 10 0s6.7 3.3 10 0"/></svg>
+  </a>
+  <nav class="rail-nav" id="nav" aria-label="Sections">
+    <a href="index.html#overview" data-sec="overview" aria-label="Overview" title="Overview"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg></a>
+    <a href="explore.html" data-sec="explore" aria-label="Explorer" title="Explorer"><svg viewBox="0 0 24 24"><path d="M2 9c2.5-2.5 5-2.5 7.5 0s5 2.5 7.5 0 3.5-2 5-1"/><path d="M2 15c2.5-2.5 5-2.5 7.5 0s5 2.5 7.5 0 3.5-2 5-1"/></svg></a>
+    <a href="scenarios.html" data-sec="scenarios" aria-label="Scenarios" title="Scenarios"><svg viewBox="0 0 24 24"><path d="M5 20V11M11 20V5M17 20v-6M3 20h18"/></svg></a>
+    <a href="chemistry.html" data-sec="chemistry" aria-label="Chemistry" title="Chemistry"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6L4.6 18.6A1.6 1.6 0 0 0 6 21h12a1.6 1.6 0 0 0 1.4-2.4L14 9V3M7 15h10"/></svg></a>
+    <a href="timeline.html" data-sec="timeline" aria-label="Timeline" title="Timeline"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></a>
+    <a href="quiz.html" data-sec="quiz" class="active" aria-label="Quiz" title="Quiz"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6M12 17h.01"/></svg></a>
+    <a href="methods.html#limits" data-sec="limits" aria-label="Methods" title="Methods"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></a>
+    <a href="methods.html#get" data-sec="get" aria-label="Download" title="Download"><svg viewBox="0 0 24 24"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5M12 11v6M9 14l3 3 3-3"/></svg></a>
+  </nav>
+  <a class="rail-gh" href="https://github.com/itzstephen167/ocean-acidification-predictor" aria-label="View source on GitHub" title="View source on GitHub">
+    <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+  </a>
+</aside>
+
+<main id="main" tabindex="-1">
+
+  <!-- QUIZ -->
+  <section id="quiz">
+    <div class="page-head">
+      <div>
+        <h1>Quiz</h1>
+        <p class="sub">Predict what the model will say, then watch it work out the answer in your browser.</p>
+      </div>
+      <div class="stepper" aria-live="polite"><span class="stepper-label">Score</span><b id="qzScore">0</b>&nbsp;<span class="stepper-label" id="qzOf">from 0 rounds</span></div>
+    </div>
+
+    <div class="stage qz-stage">
+      <div class="card">
+        <div class="card-head"><h2 id="qzTitle">Question 1</h2><span class="badge purple" id="qzScn">Intermediate</span></div>
+        <p class="card-sub" id="qzQuestion"></p>
+        <div class="dial">
+          <label for="qzGuess">Your guess <output id="qzGuessOut"></output></label>
+          <input type="range" id="qzGuess">
+        </div>
+        <p class="note" id="qzHint"></p>
+        <div class="pump-row">
+          <button class="btn primary" id="qzCheck">Lock in my guess</button>
+          <button class="btn soft" id="qzNext" disabled>Next question</button>
+        </div>
+      </div>
+
+      <div class="card" aria-live="polite">
+        <div class="card-head"><h2>The model's answer</h2><span class="badge" id="qzVerdict">Waiting</span></div>
+        <p class="card-sub" id="qzIntro">Lock in a guess to run the model.</p>
+        <ol class="react-steps qz-steps" id="qzSteps">
+          <li><b>Air to sea</b><span></span></li>
+          <li><b>Solve the chemistry</b><span></span></li>
+          <li><b>Read the result</b><span></span></li>
+        </ol>
+        <div class="stats qz-stats">
+          <div class="stat"><span class="k">Your guess</span><span class="v" id="qzYou">–</span><span class="u"></span></div>
+          <div class="stat"><span class="k">Model</span><span class="v" id="qzModel">–</span><span class="u"></span></div>
+          <div class="stat"><span class="k">Off by</span><span class="v" id="qzOff">–</span><span class="u"></span></div>
+          <div class="stat"><span class="k">Points</span><span class="v" id="qzPts">–</span><span class="u">out of 3</span></div>
+        </div>
+        <a class="btn soft small" id="qzExplore" href="explore.html">Open this year in the explorer</a>
+      </div>
+    </div>
+    <p class="note">Each answer is computed when you lock in, with the same carbonate solver and default settings (18 °C, alkalinity 2300 µmol/kg) as the explorer. Points: 3 for a close guess, 2 for near, 1 for the right ballpark.</p>
+  </section>
+
+  <footer>
+    <span>© 2026 Sour Seas · Built by Stephen Apemah-Baah</span>
+    <span>Constants: Weiss 1974, Lueker et al. 2000, Dickson 1990, Millero 1995, Mucci 1983, Lee et al. 2010</span>
+  </footer>
+</main>
+
+<script src="assets/data.js"></script>
+<script src="assets/model.js"></script>
+<script src="common.js"></script>
+<script src="quiz.js"></script>
+</body>
+</html>
