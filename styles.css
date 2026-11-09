@@ -82,7 +82,7 @@ main > section + section { margin-top: 28px; }
   .rail-nav svg, .rail-gh svg { width: 19px; height: 19px; }
   main { margin-left: 0; padding-top: 24px; }
 }
-@media (max-width: 380px) { .rail-nav a, .rail-gh { width: 36px; } .rail { padding: 0 8px; gap: 4px; } }
+@media (max-width: 380px) { .rail-nav a, .rail-gh { width: 32px; } .rail { padding: 0 8px; gap: 4px; } }
 
 /* ---------- page head ---------- */
 .page-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 28px; }
@@ -300,3 +300,7 @@ input[type=range]:focus-visible { outline: 3px solid rgba(106,76,245,.35); outli
 footer { margin-top: 36px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; color: var(--muted); font-size: .8rem; }
 
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+/* ---------- quiz ---------- */
+.qz-stage { margin-top: 0; }
+.qz-steps { grid-template-columns: 1fr; }
+.qz-stats { margin: 0 0 18px; }
