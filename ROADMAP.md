@@ -23,3 +23,16 @@ Keep the current look. These add to the design rather than replacing it.
 - [x] 14. Methods page: move the checks, cautions, sensor calculator and downloads to `methods.html`
 - [x] 15. Timeline page: scroll through 1850–2100 with the model's pH and Ω updating at each milestone year
 - [x] 16. Quiz page: predict the model's result, then see the answer computed live
+
+## Polish and extras
+
+None of these need outside data.
+
+- [x] 17. Glossary page: `glossary.html` explaining pH, Ω, pCO₂, alkalinity and the other terms, linked from where each term first appears
+- [ ] 18. Print styles: charts and tables print cleanly, with the side rail and controls hidden
+- [ ] 19. Custom 404 page with links back to each page
+- [ ] 20. Download any chart as a PNG image
+- [ ] 21. "What changed?" summary on the explorer: plain-language sentence comparing the chosen year with today
+- [ ] 22. Remember the last scenario and dial settings between visits (URL settings still win)
+- [ ] 23. Marine life page: `life.html` showing which organisms are at risk as Ω falls past each threshold in the model
+- [ ] 24. Unit toggle on the explorer: show acidity as pH or as hydrogen-ion concentration
