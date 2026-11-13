@@ -304,3 +304,16 @@ footer { margin-top: 36px; padding-top: 18px; border-top: 1px solid var(--line);
 .qz-stage { margin-top: 0; }
 .qz-steps { grid-template-columns: 1fr; }
 .qz-stats { margin: 0 0 18px; }
+
+/* glossary */
+a.term { text-decoration: underline dotted; text-underline-offset: 3px; }
+a.term:hover { text-decoration-style: solid; }
+dd a.term { color: var(--purple-text); white-space: nowrap; }
+.gloss-find { display: grid; gap: 6px; max-width: 320px; margin-top: 14px; font-size: .86rem; font-weight: 500; }
+.gloss-find input { font: inherit; font-weight: 400; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 9px 12px; }
+.gloss { margin: 14px 0 0; }
+.gloss-item { padding: 16px 12px; margin: 0 -12px; border-radius: 12px; scroll-margin-top: 24px; }
+.gloss-item + .gloss-item { border-top: 1px solid var(--line); }
+.gloss-item.target { background: var(--purple-soft); border-top-color: transparent; }
+.gloss dt { font-weight: 600; font-size: 1.02rem; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.gloss dd { margin: 6px 0 0; max-width: 760px; font-size: .94rem; }

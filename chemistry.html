@@ -39,6 +39,7 @@
     <a href="chemistry.html" data-sec="chemistry" class="active" aria-label="Chemistry" title="Chemistry"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6L4.6 18.6A1.6 1.6 0 0 0 6 21h12a1.6 1.6 0 0 0 1.4-2.4L14 9V3M7 15h10"/></svg></a>
     <a href="timeline.html" data-sec="timeline" aria-label="Timeline" title="Timeline"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></a>
     <a href="quiz.html" data-sec="quiz" aria-label="Quiz" title="Quiz"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6M12 17h.01"/></svg></a>
+    <a href="glossary.html" data-sec="glossary" aria-label="Glossary" title="Glossary"><svg viewBox="0 0 24 24"><path d="M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h10M9 8h5"/></svg></a>
     <a href="methods.html#limits" data-sec="limits" aria-label="Methods" title="Methods"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></a>
     <a href="methods.html#get" data-sec="get" aria-label="Download" title="Download"><svg viewBox="0 0 24 24"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5M12 11v6M9 14l3 3 3-3"/></svg></a>
   </nav>
@@ -63,7 +64,7 @@
         <h2>Pump in CO₂</h2>
         <div class="seg" role="group" aria-label="Jump to a CO₂ level" id="co2Seg"></div>
       </div>
-      <p class="card-sub">CO₂ reacts with carbonate ions: <code>CO₂ + CO₃²⁻ + H₂O → 2 HCO₃⁻</code>. Carbonate, which shells are built from, gets used up and hydrogen ions build up.</p>
+      <p class="card-sub">CO₂ reacts with <a class="term" href="glossary.html#carbonate">carbonate ions</a>: <code>CO₂ + CO₃²⁻ + H₂O → 2 HCO₃⁻</code>. Carbonate, which shells are built from, gets used up and hydrogen ions build up.</p>
       <div class="pump-row">
         <button class="btn primary" id="pumpBtn">Pump in 50 ppm</button>
         <button class="btn soft" id="pumpReset">Reset</button>
@@ -76,7 +77,7 @@
         <div class="stat"><span class="k">Atmospheric CO₂</span><span class="v" id="chCo2">–</span><span class="u">ppm</span></div>
         <div class="stat"><span class="k">Surface pH</span><span class="v" id="chPh">–</span><span class="u" id="chPhDelta"></span></div>
         <div class="stat"><span class="k">Carbonate</span><span class="v" id="chCo3">–</span><span class="u">µmol/kg</span></div>
-        <div class="stat"><span class="k">Aragonite Ω</span><span class="v" id="chOmega">–</span><span class="u">below 1, shells dissolve</span></div>
+        <div class="stat"><span class="k"><a class="term" href="glossary.html#omega">Aragonite Ω</a></span><span class="v" id="chOmega">–</span><span class="u">below 1, shells dissolve</span></div>
       </div>
       <ol class="react-steps" id="reactSteps" aria-live="polite">
         <li data-step="1"><b>CO₂ dissolves</b><span id="stepCo2">Pump some in to begin.</span></li>
@@ -92,7 +93,7 @@
     <div class="grid3">
       <div class="card step-card"><span class="num">1</span><h3>Air meets water</h3><p>Surface water takes up a set share of the rise in atmospheric CO₂. That share, 89%, is calibrated to the observed 1985–2022 pH trend.</p></div>
       <div class="card step-card"><span class="num">2</span><h3>Solve for H⁺</h3><p>Given alkalinity and CO₂, the model searches for the hydrogen-ion concentration that balances carbonate, borate and water charges.</p></div>
-      <div class="card step-card"><span class="num">3</span><h3>Read the outputs</h3><p>pH, dissolved inorganic carbon, carbonate, and Ω: calcium × carbonate over aragonite's solubility product.</p></div>
+      <div class="card step-card"><span class="num">3</span><h3>Read the outputs</h3><p>pH, <a class="term" href="glossary.html#dic">dissolved inorganic carbon</a>, carbonate, and Ω: calcium × carbonate over aragonite's solubility product.</p></div>
     </div>
   </section>
 
