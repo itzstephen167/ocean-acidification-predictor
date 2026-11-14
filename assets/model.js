@@ -54,7 +54,7 @@
     };
   }
 
-  const DEFAULTS = { ta: 2300, temp: 18, sal: 35, eq: 0.891, ref: PREINDUSTRIAL_PPM, warming: 0 };
+  const DEFAULTS = { ta: 2300, temp: 18, sal: 35, eq: 0.888, ref: PREINDUSTRIAL_PPM, warming: 0 };
 
   function oceanState(xppm, year, p, over) {
     const o = Object.assign({}, p, over || {});

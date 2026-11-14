@@ -44,7 +44,7 @@ def projection(scenario: str = "intermediate", ta: float = 2300.0, temp: float =
 Validate and bound `scenario`, `ta` (about 1800-2800) and `temp` (about 0-35 C) before using them in production.
 
 ## Before you publish: replace the data
-- **CO2 history:** the built-in record is approximate (1960-2023 within ~0.5 ppm of NOAA Mauna Loa annual means, rounded; pre-1958 ±2 ppm; 2024-2025 estimated). Download NOAA GML's `co2_annmean_mlo.csv`, then:
+- **CO2 history:** from 1959 the model uses NOAA GML's Mauna Loa annual means (`co2_annmean_mlo.csv`, shipped next to the module and read on first use); 1850-1958 are ice-core based estimates (±2 ppm). To use a newer NOAA file, replace that file, or load one from elsewhere:
   ```python
   m.load_noaa_co2_annual("data/co2_annmean_mlo.csv")
   k = m.calibrate_equilibration()     # re-calibrate to the observed trend
@@ -61,7 +61,7 @@ I could not download any of these here (no network access), so none are bundled.
 ## What the model is (and is not)
 - Global-mean surface box: total alkalinity 2300 umol/kg, 18 C, salinity 35 (typical round values, not fitted).
 - Carbonate system: CO2, bicarbonate, carbonate, borate and water alkalinity; constants from Weiss 1974 (K0), Lueker et al. 2000 (K1, K2), Dickson 1990 (KB), Millero 1995 (Kw), Mucci 1983 (aragonite Ksp), Lee et al. 2010 (boron), Weiss & Price 1980 (water vapour). pH is on the total scale.
-- One calibrated parameter, `equilibration` = 0.891: the fraction of the atmospheric CO2 rise the surface water has caught up with, tuned so the 1985-2022 trend is -0.0017 pH/yr (Copernicus Marine global surface pH). It is assumed constant in the future.
+- One calibrated parameter, `equilibration` = 0.888: the fraction of the atmospheric CO2 rise the surface water has caught up with, tuned so the 1985-2022 trend is -0.0017 pH/yr (Copernicus Marine global surface pH). It is assumed constant in the future.
 - Checks that were *not* tuned: modelled pH change 1850 to 2022 is -0.125 (Copernicus quotes about -0.1, rounded), and the Revelle factor is 10.6 (typical range roughly 8-14). The 2100 pH under the very-high scenario is 7.70, in line with published high-emissions projections.
 - Uncertainty bands are parameter uncertainty only (alkalinity ±40 umol/kg, temperature ±1.5 C, equilibration ±0.05), chosen as plausible spreads, not statistically estimated. They exclude scenario choice, regional differences and natural variability.
 - Not modelled: regional variation, changing alkalinity or circulation, biology, sulfate/fluoride/phosphate/silicate alkalinity terms. Cross-check against PyCO2SYS before quoting numbers in anything formal.

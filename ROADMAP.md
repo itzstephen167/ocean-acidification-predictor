@@ -11,7 +11,7 @@ Small, self-contained improvements, done one at a time.
 - [x] 7. Accessibility: data-table fallback for the charts, check focus order and contrast
 - [x] 8. Sensor-detection calculator ("how many years until a sensor can see the trend?")
 - [x] 9. Region presets: polar, tropical, coastal upwelling
-- [ ] 10. Replace the built-in CO₂ history with the official NOAA Mauna Loa file
+- [x] 10. Replace the built-in CO₂ history with the official NOAA Mauna Loa file
 
 ## Pages and interactive features
 

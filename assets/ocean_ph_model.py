@@ -30,6 +30,7 @@ illustrative approximations of SSP-like pathways.
 from __future__ import annotations
 
 from dataclasses import dataclass, asdict
+from pathlib import Path
 from typing import Iterable
 
 import numpy as np
@@ -181,7 +182,7 @@ class OceanParams:
     ta_umol_kg: float = 2300.0          # total alkalinity
     temp_c: float = 18.0                # sea-surface temperature
     salinity: float = 35.0
-    equilibration: float = 0.891         # fraction of the atmospheric CO2 rise seen by surface water
+    equilibration: float = 0.888         # fraction of the atmospheric CO2 rise seen by surface water
     pco2_ref_ppm: float = PREINDUSTRIAL_PPM
     warming_c_per_decade: float = 0.0   # optional SST warming applied after LAST_OBS_YEAR
 
@@ -202,9 +203,9 @@ class Uncertainty:
 # 3. Atmospheric CO2: history and scenarios
 # --------------------------------------------------------------------------------------
 
-# Approximate annual-mean CO2 (ppm). 1960-2023 follow the NOAA Mauna Loa annual means to within
-# ~0.5 ppm (rounded); 1850-1950 are ice-core based, +/- ~2 ppm; 2024-2025 are estimates.
-# REPLACE with the official NOAA file via load_noaa_co2_annual() for publication-grade numbers.
+# Approximate annual-mean CO2 (ppm). 1850-1950 are ice-core based, +/- ~2 ppm. From 1959 the official
+# NOAA GML Mauna Loa file shipped next to this module (co2_annmean_mlo.csv) replaces these values;
+# the later anchors are only a fallback for when that file is missing.
 _CO2_ANCHORS = {
     1850: 285.0, 1900: 296.5, 1925: 304.0, 1950: 311.0, 1960: 316.9, 1965: 320.0, 1970: 325.7,
     1975: 331.1, 1980: 338.8, 1985: 346.1, 1990: 354.4, 1995: 360.8, 2000: 369.7, 2005: 379.8,
@@ -226,6 +227,7 @@ SCENARIOS = {
 
 _history_cache: pd.Series | None = None
 _history_override: pd.Series | None = None
+_NOAA_FILE = Path(__file__).with_name("co2_annmean_mlo.csv")
 
 
 def load_noaa_co2_annual(path) -> pd.Series:
@@ -250,6 +252,8 @@ def co2_history(start: int = 1850, end: int = LAST_OBS_YEAR) -> pd.Series:
         full = np.arange(yrs[0], LAST_OBS_YEAR + 1)
         _history_cache = pd.Series(PchipInterpolator(yrs, vals)(full), index=full, name="co2_ppm")
     hist = _history_cache.copy()
+    if _history_override is None and _NOAA_FILE.exists():   # read on first use, not at import
+        load_noaa_co2_annual(_NOAA_FILE)
     if _history_override is not None:
         idx = _history_override.index.intersection(hist.index)
         hist.loc[idx] = _history_override.loc[idx].values
