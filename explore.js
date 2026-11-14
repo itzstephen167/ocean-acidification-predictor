@@ -172,6 +172,8 @@
   const readColors = () => { const cs = getComputedStyle(document.documentElement); for (const k of ['grid', 'text', 'ghost', 'split', 'split-text', 'cursor', 'dot', 'tag']) C[k] = cs.getPropertyValue('--chart-' + k).trim(); };
   readColors();
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { readColors(); chPh.draw && chPh.draw(); chOm.draw && chOm.draw(); });
+  // Printing switches to the light palette, so the charts are redrawn for paper and again afterwards.
+  window.matchMedia('print').addEventListener('change', () => { readColors(); chPh.draw && chPh.draw(); chOm.draw && chOm.draw(); });
 
   function drawChart(ch, o) {
     const { ctx, w, h } = ch; if (!w) return;

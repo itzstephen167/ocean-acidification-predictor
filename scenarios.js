@@ -159,6 +159,8 @@
 
   readColors();
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { readColors(); draw(); });
+  // Printing switches to the light palette, so the chart is redrawn for paper and again afterwards.
+  window.matchMedia('print').addEventListener('change', () => { readColors(); draw(); });
   loadUrl(); sync();
   new ResizeObserver(size).observe(canvas);
   window.__scenarios = { state, setYear, sync, shareUrl };

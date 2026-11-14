@@ -317,3 +317,55 @@ dd a.term { color: var(--purple-text); white-space: nowrap; }
 .gloss-item.target { background: var(--purple-soft); border-top-color: transparent; }
 .gloss dt { font-weight: 600; font-size: 1.02rem; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .gloss dd { margin: 6px 0 0; max-width: 760px; font-size: .94rem; }
+
+/* ---------- print ---------- */
+/* Paper is always light: restate the light palette so a dark-mode screen still prints dark ink on white. */
+@media print {
+  :root {
+    --canvas: #fff; --card: #fff; --ink: #262a35; --muted: #686d7c; --line: #eceef3; --surface: #f7f8fa;
+    --dark: #1f2433; --purple-soft: #efebff; --purple-text: #6a4cf5; --shadow: none; --lift: none;
+    --field-line: #dcdee6; --track: #e3e5ec; --tick: #d5d7e0; --axis-mid: #b2b6c4;
+    --badge-bg: #fbf2c0; --badge-ink: #6b5600; --teal-bg: #d8f5f1; --teal-ink: #0b6b63; --purple-ink: #4a2fc9;
+    --chart-grid: #e4e6ec; --chart-text: #686d7c; --chart-ghost: #c9ccd6; --chart-split: #d5d8e2; --chart-split-text: #686d7c;
+    --chart-cursor: rgba(31,36,51,.25); --chart-dot: #fff; --chart-tag: #1f2433;
+    color-scheme: light;
+  }
+  @page { margin: 14mm; }
+  /* Keep bars, badges and chart backgrounds, which browsers drop from print by default. */
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { font-size: 11pt; }
+
+  /* Navigation and controls do nothing on paper. */
+  .rail, .skip, .btn, .icon-btn, .scrub, .gloss-find, .no-print, input[type=range] { display: none !important; }
+  /* Segmented pickers shrink to a label for the option that is switched on. */
+  .seg { padding: 0; background: none; }
+  .seg button:not(.on) { display: none; }
+  .seg button.on { padding: 4px 12px; }
+  .select-wrap::after { display: none; }
+
+  main { margin: 0; padding: 0; max-width: none; }
+  .page-head { margin-bottom: 16px; }
+  .card { border: 1px solid var(--field-line); padding: 18px 20px; border-radius: 14px; }
+  .card + .card, .card + .grid3, .grid3 + .card, main > section + section { margin-top: 16px; }
+  .grid3, .tl-list { gap: 16px; }
+  .card, .stat, .row, .chart-block, .tank-wrap, .sp, .react-steps li, .gloss-item, .data-table tr { break-inside: avoid; }
+  h1, h2, h3, .card-head, .chart-title { break-after: avoid; }
+
+  /* Charts keep the shape they were drawn at instead of stretching to the page. */
+  .chart, .chart.short, .chart.tall { height: auto; }
+  .tank-wrap { max-width: 300px; margin: 0 auto; }
+  #tank { object-fit: cover; }
+
+  /* An open data table prints in full with its header repeated on each page; a closed one is left out. */
+  .data-table:not([open]), .data-table summary { display: none; }
+  .table-wrap { max-height: none; overflow: visible; background: none; }
+  .data-table thead { display: table-header-group; }
+  .data-table thead th { position: static; }
+  .data-table th, .data-table td { padding: 4px 10px; }
+
+  .tl-readout { position: static; }
+  .tl-item { min-height: 0; }
+  .code { white-space: pre-wrap; overflow: visible; }
+  a.term { text-decoration: none; }
+  footer { margin-top: 20px; }
+}
