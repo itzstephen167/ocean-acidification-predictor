@@ -29,7 +29,7 @@ Keep the current look. These add to the design rather than replacing it.
 None of these need outside data.
 
 - [x] 17. Glossary page: `glossary.html` explaining pH, Ω, pCO₂, alkalinity and the other terms, linked from where each term first appears
-- [ ] 18. Print styles: charts and tables print cleanly, with the side rail and controls hidden
+- [x] 18. Print styles: charts and tables print cleanly, with the side rail and controls hidden
 - [ ] 19. Custom 404 page with links back to each page
 - [ ] 20. Download any chart as a PNG image
 - [ ] 21. "What changed?" summary on the explorer: plain-language sentence comparing the chosen year with today
