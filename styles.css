@@ -203,6 +203,7 @@ select { width: 100%; appearance: none; font: 400 .95rem var(--sans); color: var
 .sw.band { background: rgba(106,76,245,.2); }
 .sw.ghost { background: var(--chart-ghost); height: 2px; margin-left: 8px; }
 .sw.ref { height: 0; border-top: 2px dashed #e5484d; }
+.btn.png-btn { margin-left: 6px; padding: 4px 10px; font-size: .76rem; border-radius: 8px; }
 .chart { width: 100%; height: 250px; display: block; touch-action: pan-y; cursor: ew-resize; border-radius: 14px; background: var(--surface); }
 .chart.short { height: 180px; }
 .chart.tall { height: 340px; }

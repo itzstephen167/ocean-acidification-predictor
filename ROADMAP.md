@@ -31,7 +31,7 @@ None of these need outside data.
 - [x] 17. Glossary page: `glossary.html` explaining pH, Ω, pCO₂, alkalinity and the other terms, linked from where each term first appears
 - [x] 18. Print styles: charts and tables print cleanly, with the side rail and controls hidden
 - [x] 19. Custom 404 page with links back to each page
-- [ ] 20. Download any chart as a PNG image
+- [x] 20. Download any chart as a PNG image
 - [ ] 21. "What changed?" summary on the explorer: plain-language sentence comparing the chosen year with today
 - [ ] 22. Remember the last scenario and dial settings between visits (URL settings still win)
 - [ ] 23. Marine life page: `life.html` showing which organisms are at risk as Ω falls past each threshold in the model
