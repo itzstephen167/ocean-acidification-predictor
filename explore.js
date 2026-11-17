@@ -21,6 +21,7 @@
   };
 
   const state = { scenario: 'intermediate', co2_50: 485, co2_100: 600, ta: 2300, temp: 18, warm: 0, year: 2025 };
+  const TODAY = 2025; // where the observed record ends and the projection starts
   const defaultParams = () => state.ta === 2300 && state.temp === 18 && state.warm === 0;
 
   /* ---------- series ---------- */
@@ -238,10 +239,25 @@
     $('cDelta').textContent = (r.pH - rows[0].pH).toFixed(3).replace('-', '−');
     target.ph = r.pH; target.co2 = r.co2_ppm; target.integ = integrityOf(r.omega_arag);
     $('shellStatus').textContent = shellText(target.integ);
+    $('whatChanged').textContent = whatChanged(r, rows[TODAY - YEAR0]);
     $('yearRange').value = r.year;
     if ($('dataTableBox').open) dataTable();
     chPh.draw && chPh.draw(); chOm.draw && chOm.draw();
     saveUrlSoon();
+  }
+  /* "What changed?": one plain sentence comparing the chosen year with today on the same path and ocean settings */
+  function whatChanged(r, now) {
+    if (r.year === TODAY) return `Today (${TODAY}): CO₂ is ${Math.round(now.co2_ppm)} ppm, surface pH is ${now.pH.toFixed(2)} and aragonite Ω is ${now.omega_arag.toFixed(2)}. Move the year to compare.`;
+    const past = r.year < TODAY, was = past ? 'was' : 'is';
+    const dCo2 = Math.round(r.co2_ppm) - Math.round(now.co2_ppm), dPh = r.pH - now.pH;
+    const co2 = dCo2 === 0 ? 'the same as today' : `${Math.abs(dCo2)} ppm ${dCo2 > 0 ? 'higher' : 'lower'} than today`;
+    // pH is a log scale, so a pH difference becomes a ratio of hydrogen-ion concentrations.
+    // Looking back, the comparison runs from that year to today; looking ahead, from today to that year.
+    const drop = past ? dPh : -dPh, ratio = Math.pow(10, drop);
+    const acid = ratio >= 1 ? `${Math.round((ratio - 1) * 100)}% more acidic` : `${Math.round((1 - ratio) * 100)}% less acidic`;
+    const ph = Math.abs(dPh) < 0.005 ? `surface pH ${was} about the same`
+      : `surface pH ${was} ${Math.abs(dPh).toFixed(2)} ${dPh < 0 ? 'lower' : 'higher'} (${past ? 'the sea is now about ' : 'about '}${acid})`;
+    return `${past ? 'In' : 'By'} ${r.year}, CO₂ ${was} ${co2}, ${ph}, and aragonite Ω ${was} ${r.omega_arag.toFixed(2)} against ${now.omega_arag.toFixed(2)} today.`;
   }
   function setYear(y) { state.year = clamp(y, YEAR0, YEAR1); readout(); }
 
