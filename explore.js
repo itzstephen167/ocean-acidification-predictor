@@ -300,7 +300,7 @@
   document.querySelectorAll('#regionSeg button').forEach((b) => b.addEventListener('click', () => {
     const r = REGIONS[b.dataset.r]; state.ta = r.ta; state.temp = r.temp; syncDials(); recompute(true);
   }));
-  $('resetBtn').addEventListener('click', () => { Object.assign(state, { ta: 2300, temp: 18, warm: 0 }); pick('intermediate'); });
+  $('resetBtn').addEventListener('click', () => { Object.assign(state, { ta: 2300, temp: 18, warm: 0 }); $('restoredNote').hidden = true; pick('intermediate'); });
   $('yearRange').addEventListener('input', (e) => { stopPlay(); setYear(+e.target.value); });
 
   /* play */
@@ -328,8 +328,8 @@
   /* ================= SHAREABLE LINKS ================= */
   // ?s=scenario&y=year, plus c50/c100 for a custom path and ta/t/w for a modified ocean. Defaults are left out.
   const snap = (v, step, lo, hi) => +clamp(Math.round(v / step) * step, lo, hi).toFixed(2);
-  function loadUrl() {
-    const q = new URLSearchParams(location.search), num = (k) => { const v = parseFloat(q.get(k)); return Number.isFinite(v) ? v : null; };
+  function loadUrl(search) {
+    const q = new URLSearchParams(search), num = (k) => { const v = parseFloat(q.get(k)); return Number.isFinite(v) ? v : null; };
     const s = q.get('s');
     if (PRESETS[s]) Object.assign(state, { scenario: s, co2_50: PRESETS[s].anchors[2050], co2_100: PRESETS[s].anchors[2100] });
     else if (s === 'custom' && num('c50') != null && num('c100') != null) Object.assign(state, { scenario: 'custom', co2_50: snap(num('c50'), 1, 400, 700), co2_100: snap(num('c100'), 1, 350, 1400) });
@@ -338,7 +338,7 @@
     if (num('w') != null) state.warm = snap(num('w'), 0.05, 0, 0.5);
     if (num('y') != null) state.year = snap(num('y'), 1, YEAR0, YEAR1);
   }
-  function shareUrl() {
+  function shareQuery() {
     const q = new URLSearchParams();
     if (state.scenario !== 'intermediate') q.set('s', state.scenario);
     if (state.scenario === 'custom') { q.set('c50', state.co2_50); q.set('c100', state.co2_100); }
@@ -347,11 +347,19 @@
     if (state.temp !== 18) q.set('t', state.temp);
     if (state.warm) q.set('w', state.warm);
     const qs = q.toString();
-    return location.pathname + (qs ? '?' + qs : '');
+    return qs ? '?' + qs : '';
   }
+  const shareUrl = () => location.pathname + shareQuery();
+
+  // The last settings are also remembered on this device and come back on the next visit,
+  // unless the link carries its own settings. Storage can be blocked, so it is best-effort.
+  const STORE = 'sour-seas-explorer';
+  const recall = () => { try { return localStorage.getItem(STORE); } catch (e) { return null; } };
+  const remember = () => { try { localStorage.setItem(STORE, shareQuery()); } catch (e) {} };
+
   // Debounced so playing the timeline doesn't flood history.replaceState.
   let urlTimer = 0;
-  function saveUrlSoon() { clearTimeout(urlTimer); urlTimer = setTimeout(() => history.replaceState(null, '', shareUrl() + location.hash), 300); }
+  function saveUrlSoon() { clearTimeout(urlTimer); urlTimer = setTimeout(() => { history.replaceState(null, '', shareUrl() + location.hash); remember(); }, 300); }
   $('shareBtn').addEventListener('click', () => {
     const b = $('shareBtn'), url = location.origin + shareUrl();
     const done = (msg) => { b.textContent = msg; setTimeout(() => { b.textContent = 'Copy link'; }, 1600); };
@@ -382,6 +390,10 @@
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   });
 
-  loadUrl(); syncDials(); recompute(true);
+  const linked = ['s', 'y', 'ta', 't', 'w', 'c50', 'c100'].some((k) => new URLSearchParams(location.search).has(k));
+  const saved = linked ? null : recall();
+  loadUrl(linked ? location.search : saved || '');
+  if (saved) $('restoredNote').hidden = false;
+  syncDials(); recompute(true);
   window.__ocean = { state, pick, setYear, getRows: () => rows, shareUrl, projectionCsv };
 })();
