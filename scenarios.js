@@ -35,7 +35,7 @@
     const pw = cw - PAD.l - PAD.r, ph = ch - PAD.t - PAD.b;
     const X = (y) => PAD.l + (y - YEAR0) / (YEAR1 - YEAR0) * pw, Y = (v) => PAD.t + (1 - (v - min) / (max - min)) * ph;
     ctx.clearRect(0, 0, cw, ch);
-    ctx.font = '11px Poppins, system-ui, sans-serif'; ctx.textBaseline = 'middle';
+    ctx.font = '11px Inter, system-ui, sans-serif'; ctx.textBaseline = 'middle';
     // grid
     ctx.strokeStyle = C.grid; ctx.fillStyle = C.text; ctx.lineWidth = 1; ctx.textAlign = 'right';
     for (let v = Math.ceil(min / m.step) * m.step; v <= max + 1e-9; v += m.step) { const y = Y(v); ctx.beginPath(); ctx.moveTo(PAD.l, y); ctx.lineTo(cw - PAD.r, y); ctx.stroke(); ctx.fillText(v.toFixed(1), PAD.l - 8, y); }

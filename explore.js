@@ -54,34 +54,63 @@
   function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
 
   /* ================= SHELL ================= */
-  const shellCache = new Map();
+  // A photo of a shell (generated with Higgsfield, background removed) that dissolves as Ω falls.
+  // Until it loads, or where the browser won't let the page read its pixels (file://), a drawn spiral stands in.
+  const shellCache = new Map(), SHELL_PX = 400;
+  const shellImg = new Image();
+  let shellPts = null, shellRim = null;   // opaque pixels, and those on the outline, sampled every 3 px
+  shellImg.onload = () => {
+    try {
+      const c = document.createElement('canvas'); c.width = c.height = SHELL_PX;
+      const x = c.getContext('2d'); x.drawImage(shellImg, 0, 0, SHELL_PX, SHELL_PX);
+      const a = x.getImageData(0, 0, SHELL_PX, SHELL_PX).data, at = (px, py) => a[(py * SHELL_PX + px) * 4 + 3];
+      const pts = [], rim = [];
+      for (let py = 3; py < SHELL_PX - 3; py += 3) for (let px = 3; px < SHELL_PX - 3; px += 3) {
+        if (at(px, py) < 200) continue;
+        pts.push([px, py]);
+        if (at(px - 3, py) < 40 || at(px + 3, py) < 40 || at(px, py - 3) < 40 || at(px, py + 3) < 40) rim.push([px, py]);
+      }
+      shellPts = pts; shellRim = rim; shellCache.clear();
+    } catch (e) { /* keep the drawn spiral */ }
+  };
+  shellImg.src = 'assets/shell.webp';
+
   function shellCanvas(integrity) {
     const key = Math.round(integrity * 40);
     if (shellCache.has(key)) return shellCache.get(key);
-    const S = 400, c = document.createElement('canvas'); c.width = c.height = S;
+    const S = SHELL_PX, c = document.createElement('canvas'); c.width = c.height = S;
     const x = c.getContext('2d'), I = key / 40, R = rng(7);
-    const cx = 200, cy = 200, pts = [];
-    for (let th = 0; th < 5 * Math.PI; th += 0.04) { const r = 4.5 * Math.exp(0.2 * th); pts.push([cx + r * Math.cos(th), cy + r * Math.sin(th), r * 0.52, th]); }
-    pts.forEach(([px, py, w, th], i) => {
-      const g = x.createRadialGradient(px - w * 0.3, py - w * 0.3, w * 0.1, px, py, w);
-      g.addColorStop(0, '#fff7ee'); g.addColorStop(0.6, '#ecd9c6'); g.addColorStop(1, '#c9a98d');
-      x.beginPath(); x.arc(px, py, w, 0, 6.283); x.fillStyle = g; x.fill();
-      if (i % 5 === 0) { x.strokeStyle = 'rgba(120,80,50,.28)'; x.lineWidth = 1; x.stroke(); }
-    });
-    // corrosion tint
+    let pit, bite;   // random spots for pits inside the shell and for bites out of its outline
+    if (shellPts) {
+      x.drawImage(shellImg, 0, 0, S, S);
+      pit = () => shellPts[Math.floor(R() * shellPts.length)];
+      bite = () => shellRim[Math.floor(R() * shellRim.length)];
+    } else {
+      const cx = 200, cy = 200, pts = [];
+      for (let th = 0; th < 5 * Math.PI; th += 0.04) { const r = 4.5 * Math.exp(0.2 * th); pts.push([cx + r * Math.cos(th), cy + r * Math.sin(th), r * 0.52, th]); }
+      pts.forEach(([px, py, w, th], i) => {
+        const g = x.createRadialGradient(px - w * 0.3, py - w * 0.3, w * 0.1, px, py, w);
+        g.addColorStop(0, '#fff7ee'); g.addColorStop(0.6, '#ecd9c6'); g.addColorStop(1, '#c9a98d');
+        x.beginPath(); x.arc(px, py, w, 0, 6.283); x.fillStyle = g; x.fill();
+        if (i % 5 === 0) { x.strokeStyle = 'rgba(120,80,50,.28)'; x.lineWidth = 1; x.stroke(); }
+      });
+      pit = () => { const p = pts[Math.floor(R() * pts.length)], a = R() * 6.283, d = R() * p[2] * 0.95; return [p[0] + Math.cos(a) * d, p[1] + Math.sin(a) * d]; };
+      bite = () => { const p = pts[Math.floor(R() * pts.length)], a = R() * 6.283; return [p[0] + Math.cos(a) * p[2], p[1] + Math.sin(a) * p[2]]; };
+    }
+    // corrosion: the shell loses its sheen and takes on a dull tint
     x.globalCompositeOperation = 'source-atop';
-    x.fillStyle = `rgba(110,90,40,${(1 - I) * 0.45})`; x.fillRect(0, 0, S, S);
+    if (shellPts) { x.fillStyle = `rgba(170,165,150,${(1 - I) * 0.22})`; x.fillRect(0, 0, S, S); }
+    x.fillStyle = `rgba(110,90,40,${(1 - I) * (shellPts ? 0.3 : 0.45)})`; x.fillRect(0, 0, S, S);
     // pits and eroded rim
     x.globalCompositeOperation = 'destination-out';
     const holes = Math.floor((1 - I) * (1 - I) * 160 + (1 - I) * 40);
     for (let h = 0; h < holes; h++) {
-      const p = pts[Math.floor(R() * pts.length)], a = R() * 6.283, d = R() * p[2] * 0.95;
-      const rad = 1.5 + R() * (2 + (1 - I) * 7);
-      x.beginPath(); x.arc(p[0] + Math.cos(a) * d, p[1] + Math.sin(a) * d, rad, 0, 6.283); x.fill();
+      const [px, py] = pit(), rad = 1.5 + R() * (2 + (1 - I) * 7);
+      x.beginPath(); x.arc(px, py, rad, 0, 6.283); x.fill();
     }
-    for (let h = 0; h < (1 - I) * 160; h++) { // bite the outline
-      const p = pts[Math.floor(R() * pts.length)], a = R() * 6.283;
-      x.beginPath(); x.arc(p[0] + Math.cos(a) * p[2], p[1] + Math.sin(a) * p[2], 1 + R() * (1 + (1 - I) * 6), 0, 6.283); x.fill();
+    for (let h = 0; h < (1 - I) * 160; h++) {
+      const [px, py] = bite();
+      x.beginPath(); x.arc(px, py, 1 + R() * (1 + (1 - I) * 6), 0, 6.283); x.fill();
     }
     x.globalCompositeOperation = 'source-over';
     shellCache.set(key, c); if (shellCache.size > 60) shellCache.delete(shellCache.keys().next().value);
@@ -181,7 +210,7 @@
     ctx.clearRect(0, 0, w, h);
     const pw = w - PAD.l - PAD.r, ph = h - PAD.t - PAD.b;
     const X = (y) => PAD.l + (y - YEAR0) / (YEAR1 - YEAR0) * pw, Y = (v) => PAD.t + (1 - (v - o.min) / (o.max - o.min)) * ph;
-    ctx.font = '11px Poppins, system-ui, sans-serif'; ctx.textBaseline = 'middle';
+    ctx.font = '11px Inter, system-ui, sans-serif'; ctx.textBaseline = 'middle';
     // grid
     ctx.strokeStyle = C.grid; ctx.fillStyle = C.text; ctx.lineWidth = 1; ctx.textAlign = 'right';
     for (let v = Math.ceil(o.min / o.step) * o.step; v <= o.max + 1e-9; v += o.step) { const y = Y(v); ctx.beginPath(); ctx.moveTo(PAD.l, y); ctx.lineTo(w - PAD.r, y); ctx.stroke(); ctx.fillText(v.toFixed(o.dec), PAD.l - 8, y); }

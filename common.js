@@ -25,7 +25,7 @@ window.OceanSite = (function () {
     const out = document.createElement('canvas'); out.width = canvas.width; out.height = canvas.height + head;
     const x = out.getContext('2d'), cs = getComputedStyle(document.documentElement);
     x.fillStyle = getComputedStyle(canvas).backgroundColor; x.fillRect(0, 0, out.width, out.height);
-    x.fillStyle = cs.getPropertyValue('--ink').trim() || '#111'; x.font = `600 ${15 * d}px Poppins, Inter, sans-serif`; x.textBaseline = 'middle';
+    x.fillStyle = cs.getPropertyValue('--ink').trim() || '#111'; x.font = `600 ${15 * d}px Fraunces, Inter, sans-serif`; x.textBaseline = 'middle';
     x.fillText(title, 14 * d, head / 2 + 2 * d);
     x.drawImage(canvas, 0, head);
     return out.toDataURL('image/png');

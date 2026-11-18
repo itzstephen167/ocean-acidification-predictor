@@ -15,7 +15,7 @@
   --shadow: 0 1px 2px rgba(16, 24, 40, .04), 0 6px 24px rgba(16, 24, 40, .05);
   --radius: 24px;
   --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --display: "Poppins", var(--sans);
+  --display: "Fraunces", Georgia, serif;
   --mono: "JetBrains Mono", ui-monospace, monospace;
   --lift: 0 1px 2px rgba(16,24,40,.06), 0 4px 14px rgba(16,24,40,.07);
   --field-line: #dcdee6; --track: #e3e5ec; --tick: #d5d7e0; --axis-mid: #b2b6c4;
@@ -155,7 +155,7 @@ kbd { font: 500 .74rem var(--sans); color: var(--ink); background: var(--card); 
 }
 
 /* ---------- overview cards ---------- */
-.highlight { background: var(--gradient); color: #fff; }
+.highlight { background: linear-gradient(160deg, rgba(14,40,62,.25) 0%, rgba(20,34,60,.78) 100%), url(assets/ocean.webp) center 30% / cover, var(--dark); color: #fff; }
 .highlight h2 { font-size: 1.2rem; }
 .highlight .big { font-family: var(--display); font-weight: 600; font-size: 3.2rem; line-height: 1.1; margin: 18px 0 8px; font-variant-numeric: tabular-nums; }
 .highlight p { margin: 0; color: rgba(255,255,255,.92); }
