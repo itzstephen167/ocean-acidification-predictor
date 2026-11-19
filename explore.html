@@ -84,7 +84,7 @@
             <canvas id="tank" role="img" aria-label="Animated ocean tank whose colour, bubbles and shell condition reflect the modelled pH and aragonite saturation"></canvas>
             <div class="tank-hud">
               <div class="hud-year" id="hudYear">2025</div>
-              <div class="hud-ph"><span id="hudPh">8.04</span><small>pH</small></div>
+              <div class="hud-ph"><span id="hudPh">8.04</span><small id="hudUnit">pH</small></div>
             </div>
             <div class="tank-status" id="shellStatus">Shell: healthy</div>
           </div>
@@ -105,11 +105,11 @@
             <div class="stat"><span class="k">Atmospheric CO₂</span><span class="v" id="cCo2">–</span><span class="u">ppm</span></div>
             <div class="stat"><span class="k">Acidity vs pre-industrial</span><span class="v" id="cAcid">–</span><span class="u">more H⁺ ions</span></div>
             <div class="stat"><span class="k"><a class="term" href="glossary.html#omega">Aragonite Ω</a></span><span class="v" id="cOmega">–</span><span class="u">below 1, shells dissolve</span></div>
-            <div class="stat"><span class="k">pH change since 1850</span><span class="v" id="cDelta">–</span><span class="u">pH units</span></div>
+            <div class="stat"><span class="k" id="deltaK">pH change since 1850</span><span class="v" id="cDelta">–</span><span class="u" id="deltaU">pH units</span></div>
           </div>
           <p class="changed" id="whatChanged"></p>
           <div class="chart-block">
-            <div class="chart-title"><h3>Surface pH</h3><span class="legend"><i class="sw band"></i>90% parameter range <i class="sw ghost"></i>other scenarios</span></div>
+            <div class="chart-title"><h3 id="phTitle">Surface pH</h3><div class="seg small" role="radiogroup" aria-label="Show acidity as" id="unitSeg"><button role="radio" data-u="ph" title="Show acidity as pH">pH</button><button role="radio" data-u="h" title="Show acidity as the hydrogen-ion concentration, 10^−pH, in nanomoles per kilogram of seawater">H⁺</button></div><span class="legend"><i class="sw band"></i>90% parameter range <i class="sw ghost"></i>other scenarios</span></div>
             <canvas id="chartPh" class="chart" role="img" aria-label="Line chart of modelled global surface pH from 1850 to 2100. The same values are in the data table below the charts."></canvas>
           </div>
           <div class="chart-block">
@@ -122,7 +122,7 @@
             <div class="table-wrap">
               <table>
                 <caption id="dataCaption"></caption>
-                <thead><tr><th scope="col">Year</th><th scope="col">CO₂ (ppm)</th><th scope="col">pH</th><th scope="col">pH range (5–95%)</th><th scope="col">Aragonite Ω</th></tr></thead>
+                <thead><tr><th scope="col">Year</th><th scope="col">CO₂ (ppm)</th><th scope="col">pH</th><th scope="col">pH range (5–95%)</th><th scope="col">H⁺ (nmol/kg)</th><th scope="col">Aragonite Ω</th></tr></thead>
                 <tbody id="dataBody"></tbody>
               </table>
             </div>

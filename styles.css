@@ -175,6 +175,8 @@ select { width: 100%; appearance: none; font: 400 .95rem var(--sans); color: var
 .seg button { font: 500 .88rem var(--sans); padding: 8px 14px; border-radius: 10px; border: 0; background: transparent; color: var(--ink); cursor: pointer; }
 .seg button:hover { background: var(--surface); }
 .seg button.on { background: var(--dark); color: #fff; }
+.seg.small { padding: 3px; border-radius: 11px; }
+.seg.small button { padding: 4px 11px; font-size: .8rem; border-radius: 8px; }
 .stage { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 32px; align-items: start; margin-top: 22px; }
 @media (max-width: 980px) { .stage { grid-template-columns: 1fr; } }
 .tank-wrap { position: relative; border-radius: 18px; overflow: hidden; aspect-ratio: 4 / 5; max-height: 640px; width: 100%; background: #0b2a3d; }

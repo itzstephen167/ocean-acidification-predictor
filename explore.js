@@ -20,7 +20,7 @@
     upwelling: { ta: 2230, temp: 12, note: 'Cool, lower-alkalinity water. The model keeps the surface in balance with the air, so it leaves out the CO₂-rich deep water that upwelling brings up and makes real upwelling zones more acidic still.' },
   };
 
-  const state = { scenario: 'intermediate', co2_50: 485, co2_100: 600, ta: 2300, temp: 18, warm: 0, year: 2025 };
+  const state = { scenario: 'intermediate', co2_50: 485, co2_100: 600, ta: 2300, temp: 18, warm: 0, year: 2025, unit: 'ph' };
   const TODAY = 2025; // where the observed record ends and the projection starts
   const defaultParams = () => state.ta === 2300 && state.temp === 18 && state.warm === 0;
 
@@ -249,23 +249,37 @@
     return { min: Math.floor((lo - pad) / step) * step, max: Math.ceil((hi + pad) / step) * step };
   }
 
+  /* ================= ACIDITY UNITS ================= */
+  // Acidity can be shown as pH or as the hydrogen-ion concentration pH stands for: [H⁺] = 10^−pH mol/kg,
+  // shown in nmol/kg. A higher pH means fewer ions, so the band's ends swap over.
+  const hOf = (ph) => Math.pow(10, 9 - ph);
+  const hCache = new WeakMap();
+  const hRows = (set) => {
+    if (!hCache.has(set)) hCache.set(set, set.map((r) => ({ year: r.year, h: hOf(r.pH), h_lo: hOf(r.pH_hi), h_hi: hOf(r.pH_lo) })));
+    return hCache.get(set);
+  };
+
   /* ================= UPDATE ================= */
   let rows = D.projections.intermediate, fineTimer = 0;
   function render() {
     const ghosts = Object.keys(PRESETS).filter((s) => s !== state.scenario).map((s) => D.projections[s]);
-    const dp = domain(rows, ghosts, 'pH', 0.05, 0.1), dom = domain(rows, ghosts, 'omega_arag', 0.06, 0.5);
-    chPh.draw = () => drawChart(chPh, { rows, ghosts, key: 'pH', dec: 2, step: 0.1, min: dp.min, max: dp.max });
+    const asH = state.unit === 'h', acid = asH ? hRows(rows) : rows, acidGhosts = asH ? ghosts.map(hRows) : ghosts;
+    const key = asH ? 'h' : 'pH', step = asH ? 2 : 0.1;
+    const dp = domain(acid, acidGhosts, key, 0.05, step), dom = domain(rows, ghosts, 'omega_arag', 0.06, 0.5);
+    chPh.draw = () => drawChart(chPh, { rows: acid, ghosts: acidGhosts, key, dec: asH ? 0 : 2, step, min: dp.min, max: dp.max });
     chOm.draw = () => drawChart(chOm, { rows, ghosts, key: 'omega_arag', dec: 1, step: 0.5, min: Math.min(dom.min, 0.5), max: dom.max, ref: 1 });
     chPh.draw(); chOm.draw();
     readout();
   }
   function readout() {
     const r = rows[clamp(state.year - YEAR0, 0, rows.length - 1)];
-    $('hudYear').textContent = r.year; $('hudPh').textContent = r.pH.toFixed(2);
+    const asH = state.unit === 'h';
+    $('hudYear').textContent = r.year; $('hudPh').textContent = asH ? hOf(r.pH).toFixed(1) : r.pH.toFixed(2);
     $('cCo2').textContent = Math.round(r.co2_ppm);
     $('cAcid').textContent = '+' + r.acidity_change_pct.toFixed(0) + '%';
     $('cOmega').textContent = r.omega_arag.toFixed(2);
-    $('cDelta').textContent = (r.pH - rows[0].pH).toFixed(3).replace('-', '−');
+    const dH = hOf(r.pH) - hOf(rows[0].pH);
+    $('cDelta').textContent = asH ? (dH >= 0 ? '+' : '−') + Math.abs(dH).toFixed(2) : (r.pH - rows[0].pH).toFixed(3).replace('-', '−');
     target.ph = r.pH; target.co2 = r.co2_ppm; target.integ = integrityOf(r.omega_arag);
     $('shellStatus').textContent = shellText(target.integ);
     $('whatChanged').textContent = whatChanged(r, rows[TODAY - YEAR0]);
@@ -296,12 +310,24 @@
     $('dataCaption').textContent = `${scn}, every 10 years. The selected year (${state.year}) is highlighted.`;
     $('dataBody').innerHTML = rows.filter((r) => r.year % 10 === 0 || r.year === state.year).map((r) =>
       `<tr${r.year === state.year ? ' class="now" aria-current="true"' : ''}><td>${r.year}</td><td>${Math.round(r.co2_ppm)}</td><td>${r.pH.toFixed(3)}</td>` +
-      `<td>${r.pH_lo.toFixed(3)}–${r.pH_hi.toFixed(3)}</td><td>${r.omega_arag.toFixed(2)}</td></tr>`).join('');
+      `<td>${r.pH_lo.toFixed(3)}–${r.pH_hi.toFixed(3)}</td><td>${hOf(r.pH).toFixed(2)}</td><td>${r.omega_arag.toFixed(2)}</td></tr>`).join('');
   }
   $('dataTableBox').addEventListener('toggle', () => { if ($('dataTableBox').open) dataTable(); });
 
   function recompute(fine) { rows = getRows(fine); render(); }
+  function syncUnit() {
+    const asH = state.unit === 'h';
+    document.querySelectorAll('#unitSeg button').forEach((b) => { const on = b.dataset.u === state.unit; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); });
+    $('phTitle').textContent = asH ? 'Hydrogen ions (H⁺)' : 'Surface pH';
+    $('hudUnit').textContent = asH ? 'nmol/kg H⁺' : 'pH';
+    $('deltaK').textContent = asH ? 'H⁺ change since 1850' : 'pH change since 1850';
+    $('deltaU').textContent = asH ? 'nmol/kg' : 'pH units';
+    $('chartPh').setAttribute('aria-label', (asH ? 'Line chart of the modelled hydrogen-ion concentration in surface seawater, in nanomoles per kilogram,' : 'Line chart of modelled global surface pH') + ' from 1850 to 2100. The same values are in the data table below the charts.');
+  }
+  document.querySelectorAll('#unitSeg button').forEach((b) => b.addEventListener('click', () => { state.unit = b.dataset.u; syncUnit(); render(); }));
+
   function syncDials() {
+    syncUnit();
     $('sCo250').value = state.co2_50; $('sCo2100').value = state.co2_100; $('sTa').value = state.ta; $('sTemp').value = state.temp; $('sWarm').value = state.warm;
     $('oCo250').textContent = state.co2_50 + ' ppm'; $('oCo2100').textContent = state.co2_100 + ' ppm';
     $('oTa').textContent = state.ta + ' µmol/kg'; $('oTemp').textContent = state.temp.toFixed(1) + ' °C'; $('oWarm').textContent = '+' + state.warm.toFixed(2) + ' °C/decade';
@@ -355,7 +381,7 @@
   });
 
   /* ================= SHAREABLE LINKS ================= */
-  // ?s=scenario&y=year, plus c50/c100 for a custom path and ta/t/w for a modified ocean. Defaults are left out.
+  // ?s=scenario&y=year, plus c50/c100 for a custom path, ta/t/w for a modified ocean and u=h for H⁺ units. Defaults are left out.
   const snap = (v, step, lo, hi) => +clamp(Math.round(v / step) * step, lo, hi).toFixed(2);
   function loadUrl(search) {
     const q = new URLSearchParams(search), num = (k) => { const v = parseFloat(q.get(k)); return Number.isFinite(v) ? v : null; };
@@ -366,6 +392,7 @@
     if (num('t') != null) state.temp = snap(num('t'), 0.5, 0, 32);
     if (num('w') != null) state.warm = snap(num('w'), 0.05, 0, 0.5);
     if (num('y') != null) state.year = snap(num('y'), 1, YEAR0, YEAR1);
+    if (q.get('u') === 'h') state.unit = 'h';
   }
   function shareQuery() {
     const q = new URLSearchParams();
@@ -375,6 +402,7 @@
     if (state.ta !== 2300) q.set('ta', state.ta);
     if (state.temp !== 18) q.set('t', state.temp);
     if (state.warm) q.set('w', state.warm);
+    if (state.unit === 'h') q.set('u', 'h');
     const qs = q.toString();
     return qs ? '?' + qs : '';
   }
@@ -419,7 +447,7 @@
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   });
 
-  const linked = ['s', 'y', 'ta', 't', 'w', 'c50', 'c100'].some((k) => new URLSearchParams(location.search).has(k));
+  const linked = ['s', 'y', 'ta', 't', 'w', 'c50', 'c100', 'u'].some((k) => new URLSearchParams(location.search).has(k));
   const saved = linked ? null : recall();
   loadUrl(linked ? location.search : saved || '');
   if (saved) $('restoredNote').hidden = false;
