@@ -201,7 +201,9 @@
   let C = {};
   const readColors = () => { const cs = getComputedStyle(document.documentElement); for (const k of ['grid', 'text', 'ghost', 'split', 'split-text', 'cursor', 'dot', 'tag']) C[k] = cs.getPropertyValue('--chart-' + k).trim(); };
   readColors();
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { readColors(); chPh.draw && chPh.draw(); chOm.draw && chOm.draw(); });
+  const recolour = () => { readColors(); chPh.draw && chPh.draw(); chOm.draw && chOm.draw(); };
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', recolour);
+  window.addEventListener('themechange', recolour);
   // Printing switches to the light palette, so the charts are redrawn for paper and again afterwards.
   window.matchMedia('print').addEventListener('change', () => { readColors(); chPh.draw && chPh.draw(); chOm.draw && chOm.draw(); });
 

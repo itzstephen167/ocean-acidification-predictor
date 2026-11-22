@@ -25,9 +25,9 @@
   --chart-cursor: rgba(31,36,51,.25); --chart-dot: #fff; --chart-tag: #1f2433;
   color-scheme: light;
 }
-/* Dark mode follows the system setting. */
+/* Dark mode follows the system setting, unless the rail's theme switch has picked light or dark. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --canvas: #12151c; --card: #1c202b; --ink: #e6e8ee; --muted: #9aa0ad; --line: #2a2f3c; --surface: #242936;
     --dark: #323a4f; --purple-soft: #2c2650; --purple-text: #a693ff;
     --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 24px rgba(0, 0, 0, .25);
@@ -38,6 +38,17 @@
     --chart-cursor: rgba(230,232,238,.25); --chart-dot: #1c202b; --chart-tag: #3a4258;
     color-scheme: dark;
   }
+}
+:root[data-theme="dark"] {
+  --canvas: #12151c; --card: #1c202b; --ink: #e6e8ee; --muted: #9aa0ad; --line: #2a2f3c; --surface: #242936;
+  --dark: #323a4f; --purple-soft: #2c2650; --purple-text: #a693ff;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 24px rgba(0, 0, 0, .25);
+  --lift: 0 1px 2px rgba(0, 0, 0, .35), 0 4px 14px rgba(0, 0, 0, .3);
+  --field-line: #3a4050; --track: #343a4a; --tick: #4a5164; --axis-mid: #5a6175;
+  --badge-bg: #3d3514; --badge-ink: #f3d86b; --teal-bg: #12352f; --teal-ink: #7fdcd0; --purple-ink: #c2b4ff; --soft-hover: #383063;
+  --chart-grid: #2f3442; --chart-text: #9aa0ad; --chart-ghost: #4a5164; --chart-split: #3a4050; --chart-split-text: #8f95a8;
+  --chart-cursor: rgba(230,232,238,.25); --chart-dot: #1c202b; --chart-tag: #3a4258;
+  color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
@@ -66,6 +77,9 @@ code { font-family: var(--mono); font-size: .84em; background: var(--surface); b
 .rail-gh { background: var(--purple); color: #fff; }
 .rail-gh:hover { background: var(--purple-dark); }
 .rail-gh svg { width: 22px; height: 22px; fill: currentColor; }
+.rail-theme { width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; margin-bottom: 10px; border: 0; background: none; color: var(--ink); cursor: pointer; transition: background .15s; }
+.rail-theme:hover { background: var(--surface); }
+.rail-theme svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 
 /* Skip link: first thing keyboard users reach, hidden until focused */
 .skip { position: absolute; left: 12px; top: -60px; z-index: 30; background: var(--dark); color: #fff; padding: 10px 16px; border-radius: 10px; font-weight: 500; text-decoration: none; }
@@ -77,12 +91,15 @@ main > section + section { margin-top: 28px; }
 @media (max-width: 860px) {
   .rail { position: sticky; top: 0; bottom: auto; width: 100%; height: 64px; flex-direction: row; border-radius: 0 0 18px 18px; padding: 0 12px; gap: 8px; }
   .rail-logo { width: 36px; height: 36px; flex: none; }
-  .rail-nav { margin: 0 auto; flex-direction: row; gap: 2px; }
-  .rail-nav a, .rail-gh { width: 40px; height: 40px; border-radius: 11px; flex: none; }
-  .rail-nav svg, .rail-gh svg { width: 19px; height: 19px; }
+  /* The page links scroll sideways when they don't all fit, so the bar never pushes the page wider. */
+  .rail-nav { margin: 0 auto; flex-direction: row; gap: 2px; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .rail-nav::-webkit-scrollbar { display: none; }
+  .rail-nav a, .rail-gh, .rail-theme { width: 40px; height: 40px; border-radius: 11px; flex: none; }
+  .rail-theme { margin: 0; }
+  .rail-nav svg, .rail-gh svg, .rail-theme svg { width: 19px; height: 19px; }
   main { margin-left: 0; padding-top: 24px; }
 }
-@media (max-width: 380px) { .rail-nav a, .rail-gh { width: 32px; } .rail { padding: 0 8px; gap: 4px; } }
+@media (max-width: 380px) { .rail-nav a, .rail-gh, .rail-theme { width: 32px; } .rail { padding: 0 8px; gap: 4px; } }
 
 /* ---------- page head ---------- */
 .page-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 28px; }

@@ -18,6 +18,33 @@ window.OceanSite = (function () {
   }), { rootMargin: '-45% 0px -50% 0px' });
   document.querySelectorAll('main > section').forEach((sec) => spy.observe(sec));
 
+  /* light / dark / system theme switch in the rail, remembered on this device.
+     The head of each page applies a saved choice before first paint; pages with charts redraw on "themechange". */
+  const THEMES = ['system', 'light', 'dark'], THEME_KEY = 'sour-seas-theme';
+  const THEME_ICONS = {
+    system: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg>',
+    light: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></svg>',
+    dark: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>',
+  };
+  const root = document.documentElement;
+  let theme = root.dataset.theme || 'system';
+  const themeBtn = document.createElement('button');
+  themeBtn.type = 'button'; themeBtn.className = 'rail-theme no-print';
+  function showTheme() {
+    const label = theme === 'system' ? 'Theme follows your system. Switch to light' : theme === 'light' ? 'Light theme. Switch to dark' : 'Dark theme. Switch to follow your system';
+    themeBtn.innerHTML = THEME_ICONS[theme]; themeBtn.title = label; themeBtn.setAttribute('aria-label', label);
+  }
+  themeBtn.addEventListener('click', () => {
+    theme = THEMES[(THEMES.indexOf(theme) + 1) % THEMES.length];
+    if (theme === 'system') delete root.dataset.theme; else root.dataset.theme = theme;
+    try { if (theme === 'system') localStorage.removeItem(THEME_KEY); else localStorage.setItem(THEME_KEY, theme); } catch (e) {}
+    showTheme();
+    window.dispatchEvent(new Event('themechange'));
+  });
+  showTheme();
+  const ghTile = document.querySelector('.rail-gh');
+  if (ghTile) ghTile.before(themeBtn);
+
   /* every canvas chart gets a button that saves it as a PNG */
   function chartPng(canvas, title) {
     // The canvas itself is transparent, so the card colour and the title are painted onto a copy.
