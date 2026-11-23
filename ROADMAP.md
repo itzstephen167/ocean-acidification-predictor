@@ -34,6 +34,6 @@ None of these need outside data.
 - [x] 20. Download any chart as a PNG image
 - [x] 21. "What changed?" summary on the explorer: plain-language sentence comparing the chosen year with today
 - [x] 22. Remember the last scenario and dial settings between visits (URL settings still win)
-- [ ] 23. Marine life page: `life.html` showing which organisms are at risk as Ω falls past each threshold in the model
+- [x] 23. Marine life page: `life.html` showing which organisms are at risk as Ω falls past each threshold in the model
 - [x] 24. Unit toggle on the explorer: show acidity as pH or as hydrogen-ion concentration
 - [x] 25. Light / dark switch in the side rail that overrides the system setting, remembered on this device

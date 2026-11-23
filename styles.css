@@ -390,3 +390,13 @@ dd a.term { color: var(--purple-text); white-space: nowrap; }
   a.term { text-decoration: none; }
   footer { margin-top: 20px; }
 }
+
+/* ---------- marine life ---------- */
+.life-scale { position: relative; margin: 8px 0 44px; }
+.life-bar { height: 12px; border-radius: 6px; background: var(--surface); overflow: hidden; }
+.life-bar i { display: block; height: 100%; border-radius: 6px; background: var(--purple); transition: width .3s; }
+.life-tick { position: absolute; top: -4px; height: 20px; border-left: 2px dashed var(--muted); }
+.life-tick span { position: absolute; top: 24px; left: 0; transform: translateX(-50%); font-size: .72rem; color: var(--muted); white-space: nowrap; }
+#lifeCards { margin-top: 28px; }
+.life-card .card-sub { margin-bottom: 10px; }
+.life-card .life-when { font-weight: 500; margin: 0; }
