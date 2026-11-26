@@ -37,3 +37,4 @@ None of these need outside data.
 - [x] 23. Marine life page: `life.html` showing which organisms are at risk as Ω falls past each threshold in the model
 - [x] 24. Unit toggle on the explorer: show acidity as pH or as hydrogen-ion concentration
 - [x] 25. Light / dark switch in the side rail that overrides the system setting, remembered on this device
+- [x] 26. Methods page: offer the NOAA Mauna Loa CO₂ file and the export script as downloads
